@@ -1,5 +1,9 @@
 # Authentication
 
+## Project Description 
+
+This is the backend of the ExplorViz tutorial extension.
+
 ## MongoDB setup
 
 1. Download and install [docker](https://www.docker.com/)
