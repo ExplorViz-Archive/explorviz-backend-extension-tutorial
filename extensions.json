@@ -1,5 +1,5 @@
 {
-      "imgUrl": "img/tutorial.svg",
+      "imgSrc": "tutorial.svg",
       "requiredExtensions": [
         "backend"
       ],
