@@ -24,6 +24,10 @@ public class Tutorial {
 	private String title;
 
 	private String text;
+	
+	@Reference
+	@Relationship("landscape")
+	private LandscapeSerialized landscape;
 
 	@Reference
 	@Relationship("sequences")
@@ -63,6 +67,14 @@ public class Tutorial {
 
 	public void addSequence(final Sequence sequence) {
 		this.sequences.add(sequence);
+	}
+
+	public LandscapeSerialized getLandscape() {
+		return landscape;
+	}
+
+	public void setLandscape(LandscapeSerialized landscape) {
+		this.landscape = landscape;
 	}
 
 }

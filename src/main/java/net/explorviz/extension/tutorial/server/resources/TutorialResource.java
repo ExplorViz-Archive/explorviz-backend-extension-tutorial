@@ -33,7 +33,9 @@ public class TutorialResource {
 	private static final String MSG_INVALID_TITLE = "Invalid title";
 	private static final String MSG_TUTORIAL_NOT_RETRIEVED = "Could not retrieve tutorial ";
 	private static final String MSG_TUTORIAL_NOT_UPDATED = "Could not update tutorial ";
+	private static final String MSG_INVALID_LANDSCAPE = "Invalid Landscape";
 
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TutorialResource.class);
 
 	@Inject
@@ -108,6 +110,14 @@ public class TutorialResource {
 			}
 
 			targetTutorial.setTitle(updatedTutorial.getTitle());
+		}
+		
+		if (updatedTutorial.getLandscape() != null) {
+			if (updatedTutorial.getLandscape().equals("")) {
+				throw new BadRequestException(MSG_INVALID_LANDSCAPE);
+			}
+
+			targetTutorial.setLandscape(updatedTutorial.getLandscape());
 		}
 
 		if (updatedTutorial.getSequences().size() > 0) {
