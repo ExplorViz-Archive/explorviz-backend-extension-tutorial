@@ -65,7 +65,7 @@ public class TutorialResource {
 			}
 			throw new InternalServerErrorException(ex);
 		}
-
+		LOGGER.info("Delivered: " +foundTutorial.getId() );
 		return foundTutorial;
 	}
 
@@ -82,6 +82,13 @@ public class TutorialResource {
 			}
 			throw new InternalServerErrorException(ex);
 		}
+		
+		String tutIds="";
+		for(Tutorial tut: foundTutorials ) {
+			tutIds+=" "+tut.getId();
+		}
+		LOGGER.info("Delivered: " +tutIds );
+
 		return foundTutorials;
 	}
 
@@ -112,12 +119,12 @@ public class TutorialResource {
 			targetTutorial.setTitle(updatedTutorial.getTitle());
 		}
 		
-		if (updatedTutorial.getLandscape() != null) {
-			if (updatedTutorial.getLandscape().equals("")) {
+		if (updatedTutorial.getLandscapeTimestamp() != null) {
+			if (updatedTutorial.getLandscapeTimestamp().equals("")) {
 				throw new BadRequestException(MSG_INVALID_LANDSCAPE);
 			}
 
-			targetTutorial.setLandscape(updatedTutorial.getLandscape());
+			targetTutorial.setLandscapeTimestamp(updatedTutorial.getLandscapeTimestamp());
 		}
 
 		if (updatedTutorial.getSequences().size() > 0) {

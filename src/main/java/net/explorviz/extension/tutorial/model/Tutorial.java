@@ -25,10 +25,16 @@ public class Tutorial {
 
 	private String text;
 	
-	@Reference
-	@Relationship("landscape")
-	private LandscapeSerialized landscape;
+	private String landscapeTimestamp;
+	
+	public String getLandscapeTimestamp() {
+		return landscapeTimestamp;
+	}
 
+	public void setLandscapeTimestamp(String landscapeTimestamp) {
+		this.landscapeTimestamp = landscapeTimestamp;
+	}
+		
 	@Reference
 	@Relationship("sequences")
 	private List<Sequence> sequences = new ArrayList<>();
@@ -69,12 +75,6 @@ public class Tutorial {
 		this.sequences.add(sequence);
 	}
 
-	public LandscapeSerialized getLandscape() {
-		return landscape;
-	}
 
-	public void setLandscape(LandscapeSerialized landscape) {
-		this.landscape = landscape;
-	}
 
 }

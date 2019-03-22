@@ -49,7 +49,6 @@ public class Application extends ResourceConfig {
 		this.register(TutorialResource.class);
 		this.register(SequenceResource.class);
 		this.register(StepResource.class);
-
 	}
 
 }

@@ -16,21 +16,23 @@ configurations.all {
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
+ext {	
+	expSharedVersion = "v1.3.1"
+}
+
 dependencies {
+  	implementation "com.github.explorviz.explorviz-backend-shared:security:${expSharedVersion}"
+  	
+  	implementation "com.github.explorviz.explorviz-backend-shared:config-injection:${expSharedVersion}"
+  	
+  	implementation "com.github.explorviz.explorviz-backend-shared:common-concerns:${expSharedVersion}"
+  	
+  	implementation "com.github.explorviz.explorviz-backend-shared:exception-handling:${expSharedVersion}"
 
-	// ExplorViz provides a project that contains shared source code classes for 
-	// different concerns. See:
-	// https://github.com/ExplorViz/explorviz-backend-shared
-
-  	// ExplorViz config injection
-  	implementation 'com.github.explorviz.explorviz-backend-shared:config-injection:master-SNAPSHOT'
+  	implementation "com.github.explorviz.explorviz-backend-shared:user:${expSharedVersion}"
   	
-  	// ExplorViz common exception handling
-  	implementation 'com.github.explorviz.explorviz-backend-shared:exception-handling:master-SNAPSHOT'
   	
-  	implementation 'com.github.explorviz.explorviz-backend-shared:common-concerns:master-SNAPSHOT'
   	
-  	implementation 'com.github.explorviz.explorviz-backend-shared:security:master-SNAPSHOT'
   	
   	// Local linking of external project dependency instead of Jitpack
   	//implementation project(':common-concerns')
