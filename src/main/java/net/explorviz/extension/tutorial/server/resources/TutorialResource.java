@@ -107,8 +107,8 @@ public class TutorialResource {
 			throw new InternalServerErrorException(ex);
 		}
 
-		if (updatedTutorial.getId() != null || updatedTutorial.getId() != id) { // NOPMD
-			LOGGER.info("Won't update id");
+		if (updatedTutorial.getId() != null && !updatedTutorial.getId().equals(id)) { // NOPMD
+			LOGGER.info("Won't update id "+updatedTutorial.getId()+" "+id);
 		}
 
 		if (updatedTutorial.getTitle() != null) {
@@ -125,6 +125,14 @@ public class TutorialResource {
 			}
 
 			targetTutorial.setLandscapeTimestamp(updatedTutorial.getLandscapeTimestamp());
+		}
+		
+		if (updatedTutorial.getTargetId() != null) {
+			targetTutorial.setTargetId(updatedTutorial.getTargetId());
+		}
+		
+		if (updatedTutorial.getTargetType() != null) {
+			targetTutorial.setTargetType(updatedTutorial.getTargetType());
 		}
 
 		if (updatedTutorial.getSequences().size() > 0) {
