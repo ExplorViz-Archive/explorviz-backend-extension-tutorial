@@ -108,7 +108,10 @@ public class StepResource {
 			}
 			targetStep.setTitle(updatedStep.getTitle());
 		}
-
+		
+			targetStep.setTargetId(updatedStep.getTargetId());
+			targetStep.setTargetType(updatedStep.getTargetType());
+			
 		try {
 			this.stepCrudService.updateEntity(targetStep);
 		} catch (final MongoException ex) {

@@ -109,7 +109,7 @@ public class SequenceResource {
 
 			targetSequence.setTitle(updatedSequence.getTitle());
 		}
-
+		
 		if (updatedSequence.getSteps().size() > 0) {
 			targetSequence.setSteps(updatedSequence.getSteps());
 		}

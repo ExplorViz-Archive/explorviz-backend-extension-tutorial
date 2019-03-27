@@ -60,17 +60,23 @@ public class SetupApplicationListener implements ApplicationEventListener {
 		step.setId(1L);
 		step.setTitle("Step1");
 		this.datastore.save(step);
-
+		final Step step2 = new Step();
+		step2.setId(2L);
+		step2.setTitle("Step2");
+		this.datastore.save(step);
+		
 		final Sequence seq = new Sequence();
 		seq.setId(1L);
 		seq.setTitle("Sequence1");
 		seq.addStep(step);
+		seq.addStep(step2);
+
 		this.datastore.save(seq);
 
 		final Tutorial tutorial = new Tutorial();
+	
 		tutorial.setId(1L);
 		tutorial.setTitle("First");
-		//tutorial.setLandscape(landscape);
 		tutorial.setText("Testtext");
 		tutorial.addSequence(seq);
 		LOGGER.info("Created default tutorial: " + tutorial.getTitle());

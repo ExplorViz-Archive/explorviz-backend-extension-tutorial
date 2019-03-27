@@ -1,12 +1,17 @@
 package net.explorviz.extension.tutorial.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.jasminb.jsonapi.LongIdHandler;
+import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import xyz.morphia.annotations.Entity;
 import xyz.morphia.annotations.Id;
 import xyz.morphia.annotations.IndexOptions;
 import xyz.morphia.annotations.Indexed;
+import xyz.morphia.annotations.Reference;
 
 @Type("step")
 @Entity("step")
@@ -18,7 +23,7 @@ public class Step {
 
 	@Indexed(options = @IndexOptions(unique = true))
 	private String title;
-
+	
 	private String text;
 
 	private String action;
@@ -74,5 +79,6 @@ public class Step {
 	public void setTargetId(final String targetId) {
 		this.targetId = targetId;
 	}
+	
 
 }
