@@ -1,5 +1,5 @@
 {
-      active: false,
+      "active": false,
       "imgSrc": "tutorial.svg",
       "requiredExtensions": [
         "backend_master"
