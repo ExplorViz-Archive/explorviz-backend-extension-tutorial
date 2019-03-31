@@ -9,6 +9,7 @@ import com.github.jasminb.jsonapi.SerializationFeature;
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
+import net.explorviz.shared.landscape.model.landscape.Landscape;
 
 /**
  * Factory for creating resource converts for JSON conversion.
@@ -25,6 +26,7 @@ public class ResourceConverterFactory implements Factory<ResourceConverter> {
 		resourceConverter.registerType(Tutorial.class);
 		resourceConverter.registerType(Sequence.class);
 		resourceConverter.registerType(Step.class);
+		resourceConverter.registerType(Landscape.class);
 
 		this.converter = resourceConverter;
 		this.converter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES);

@@ -24,6 +24,7 @@ import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
 import net.explorviz.extension.tutorial.model.Tutorial;
+import net.explorviz.extension.tutorial.services.LandscapeMongoService;
 import net.explorviz.extension.tutorial.services.TutorialMongoCrudService;
 
 @Path("v1/tutorials")
@@ -40,6 +41,9 @@ public class TutorialResource {
 
 	@Inject
 	private TutorialMongoCrudService tutorialCrudService;
+
+	@Inject
+	private LandscapeMongoService landscapeMongoService;
 
 	/**
 	 * Retrieves a single tutorial identified by its id.
@@ -65,6 +69,8 @@ public class TutorialResource {
 			}
 			throw new InternalServerErrorException(ex);
 		}
+		;
+		foundTutorial.setLandscape(landscapeMongoService.findEntityByTimestamp(foundTutorial.getLandscapeTimestamp()).get());
 		LOGGER.info("Delivered: " +foundTutorial.getId() );
 		return foundTutorial;
 	}
@@ -123,7 +129,7 @@ public class TutorialResource {
 			if (updatedTutorial.getLandscapeTimestamp().equals("")) {
 				throw new BadRequestException(MSG_INVALID_LANDSCAPE);
 			}
-
+			landscapeMongoService.findEntityByTimestamp(updatedTutorial.getLandscapeTimestamp());
 			targetTutorial.setLandscapeTimestamp(updatedTutorial.getLandscapeTimestamp());
 		}
 		

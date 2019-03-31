@@ -1,13 +1,18 @@
 package net.explorviz.extension.tutorial.server.injection;
 
+import javax.inject.Inject;
+
+import org.bson.Document;
 import org.glassfish.hk2.api.Factory;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
 
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.shared.config.annotations.Config;
+import net.explorviz.shared.landscape.model.landscape.Landscape;
 import xyz.morphia.Datastore;
 import xyz.morphia.Morphia;
 
@@ -17,17 +22,14 @@ public class DatastoreFactory implements Factory<Datastore> {
 	// private String port;
 
 	private final Datastore datastore;
-
-	@Config("mongo.ip")
-	@Config("mongo.port")
-	public DatastoreFactory(final String host, final String port) {
-
+	
+	
+	@Inject
+	public DatastoreFactory(MongoConnection mongoclient) {
 		final Morphia morphia = new Morphia();
-
 		// Map the model classes
 		morphia.map(Tutorial.class, Sequence.class, Step.class);
-
-		this.datastore = morphia.createDatastore(new MongoClient(host + ":" + port), "explorviz");
+		this.datastore = morphia.createDatastore(mongoclient, "explorviz");
 		this.datastore.ensureIndexes();
 	}
 
@@ -40,5 +42,5 @@ public class DatastoreFactory implements Factory<Datastore> {
 	public void dispose(final Datastore instance) {
 		// nothing to do
 	}
-
+			
 }

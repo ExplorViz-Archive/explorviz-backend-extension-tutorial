@@ -7,11 +7,13 @@ import com.github.jasminb.jsonapi.LongIdHandler;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
+import net.explorviz.shared.landscape.model.landscape.Landscape;
 import xyz.morphia.annotations.Entity;
 import xyz.morphia.annotations.Id;
 import xyz.morphia.annotations.IndexOptions;
 import xyz.morphia.annotations.Indexed;
 import xyz.morphia.annotations.Reference;
+import xyz.morphia.annotations.Transient;
 
 @Type("tutorial")
 @Entity("tutorial")
@@ -26,6 +28,9 @@ public class Tutorial {
 	private String text;
 	
 	private String landscapeTimestamp;
+
+	@Transient
+	private Landscape landscape;
 	
 	private String targetId;
 
@@ -94,6 +99,14 @@ public class Tutorial {
 
 	public void setTargetType(String targetType) {
 		this.targetType = targetType;
+	}
+
+	public Landscape getLandscape() {
+		return landscape;
+	}
+
+	public void setLandscape(Landscape landscape) {
+		this.landscape = landscape;
 	}
 
 

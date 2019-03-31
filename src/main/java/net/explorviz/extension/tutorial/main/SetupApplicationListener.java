@@ -2,7 +2,9 @@ package net.explorviz.extension.tutorial.main;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebListener;
+import javax.ws.rs.ClientErrorException;
 
+import org.bson.Document;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent.Type;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -14,7 +16,10 @@ import org.slf4j.LoggerFactory;
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
+import net.explorviz.extension.tutorial.server.injection.LandscapeDatastore;
+import net.explorviz.extension.tutorial.services.LandscapeMongoService;
 import net.explorviz.extension.tutorial.util.PasswordStorage.CannotPerformOperationException;
+import net.explorviz.shared.landscape.model.landscape.Landscape;
 import xyz.morphia.Datastore;
 
 /**
@@ -27,6 +32,11 @@ public class SetupApplicationListener implements ApplicationEventListener {
 
 	@Inject
 	private Datastore datastore;
+	
+	
+	@Inject
+	private LandscapeMongoService landscapeMongoService;
+	
 
 	@Override
 	public void onEvent(final ApplicationEvent event) {
@@ -70,11 +80,15 @@ public class SetupApplicationListener implements ApplicationEventListener {
 		seq.setTitle("Sequence1");
 		seq.addStep(step);
 		seq.addStep(step2);
-
 		this.datastore.save(seq);
 
+		if(!this.landscapeMongoService.entityExistsByTimestamp("1553961723688")){
+			String jsonlandscape= "{\"data\":{\"type\":\"landscape\",\"id\":\"landscape-5-1\",\"attributes\":{\"extensionAttributes\":{}},\"relationships\":{\"timestamp\":{\"data\":{\"type\":\"timestamp\",\"id\":\"landscape-5-967\"}},\"systems\":{\"data\":[]},\"events\":{\"data\":[]},\"totalApplicationCommunications\":{\"data\":[]}}},\"included\":[{\"type\":\"timestamp\",\"id\":\"landscape-5-967\",\"attributes\":{\"extensionAttributes\":{},\"timestamp\":1553961723688,\"totalRequests\":0}}]}";
+			this.landscapeMongoService.saveNewEntity("1553961723688", jsonlandscape);
+		}
+		
 		final Tutorial tutorial = new Tutorial();
-	
+		tutorial.setLandscapeTimestamp("1553961723688");
 		tutorial.setId(1L);
 		tutorial.setTitle("First");
 		tutorial.setText("Testtext");
