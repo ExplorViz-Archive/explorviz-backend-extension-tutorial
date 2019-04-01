@@ -2,17 +2,11 @@ package net.explorviz.extension.tutorial.server.injection;
 
 import javax.inject.Inject;
 
-import org.bson.Document;
 import org.glassfish.hk2.api.Factory;
-
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
 
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
-import net.explorviz.shared.config.annotations.Config;
-import net.explorviz.shared.landscape.model.landscape.Landscape;
 import xyz.morphia.Datastore;
 import xyz.morphia.Morphia;
 

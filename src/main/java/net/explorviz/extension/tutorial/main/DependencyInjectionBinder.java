@@ -16,7 +16,6 @@ import net.explorviz.extension.tutorial.services.LandscapeMongoService;
 import net.explorviz.extension.tutorial.services.SequenceMongoCrudService;
 import net.explorviz.extension.tutorial.services.StepMongoCrudService;
 import net.explorviz.extension.tutorial.services.TutorialMongoCrudService;
-import net.explorviz.extension.tutorial.util.LandscapeSerializationHelper;
 import net.explorviz.shared.config.annotations.ConfigValues;
 import net.explorviz.shared.config.annotations.injection.ConfigInjectionResolver;
 import net.explorviz.shared.config.annotations.injection.ConfigValuesInjectionResolver;
@@ -46,7 +45,6 @@ public class DependencyInjectionBinder extends AbstractBinder {
 		this.bind(LandscapeDatastore.class).to(LandscapeDatastore.class).in(Singleton.class);
 
 		this.bindFactory(DatastoreFactory.class).to(Datastore.class).in(Singleton.class);
-		this.bind(LandscapeSerializationHelper.class).to(LandscapeSerializationHelper.class).in(Singleton.class);
 
 		
 		this.bind(TutorialMongoCrudService.class).to(TutorialMongoCrudService.class).in(Singleton.class);

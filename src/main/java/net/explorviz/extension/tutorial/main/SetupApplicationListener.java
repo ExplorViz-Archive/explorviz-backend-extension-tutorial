@@ -19,7 +19,6 @@ import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.extension.tutorial.server.injection.LandscapeDatastore;
 import net.explorviz.extension.tutorial.services.LandscapeMongoService;
 import net.explorviz.extension.tutorial.util.PasswordStorage.CannotPerformOperationException;
-import net.explorviz.shared.landscape.model.landscape.Landscape;
 import xyz.morphia.Datastore;
 
 /**

@@ -6,6 +6,7 @@ import net.explorviz.extension.tutorial.server.providers.JsonApiListProvider;
 import net.explorviz.extension.tutorial.server.providers.JsonApiProvider;
 import net.explorviz.extension.tutorial.server.providers.ResourceConverterFactory;
 import net.explorviz.extension.tutorial.server.providers.UserJsonApiDeserializer;
+import net.explorviz.extension.tutorial.server.resources.LandscapeResource;
 import net.explorviz.extension.tutorial.server.resources.SequenceResource;
 import net.explorviz.extension.tutorial.server.resources.StepResource;
 import net.explorviz.extension.tutorial.server.resources.TutorialResource;
@@ -49,6 +50,8 @@ public class Application extends ResourceConfig {
 		this.register(TutorialResource.class);
 		this.register(SequenceResource.class);
 		this.register(StepResource.class);
+		this.register(LandscapeResource.class);
+
 	}
 
 }

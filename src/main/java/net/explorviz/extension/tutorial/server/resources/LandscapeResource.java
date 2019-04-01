@@ -1,6 +1,5 @@
 package net.explorviz.extension.tutorial.server.resources;
 
-import java.io.FileNotFoundException;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -8,13 +7,9 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.sse.Sse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,15 +17,12 @@ import org.slf4j.LoggerFactory;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
-import net.explorviz.shared.landscape.model.landscape.Landscape;
-import xyz.morphia.Datastore;
 import net.explorviz.extension.tutorial.services.LandscapeMongoService;
-import net.explorviz.extension.tutorial.util.LandscapeSerializationHelper;
 
 /**
  * Resource providing {@link Landscape} data for the frontend.
  */
-@Path("v1/landscapes")
+@Path("v1/tutorials/landscapes")
 @RolesAllowed({ "admin" })
 public class LandscapeResource {
 	
@@ -48,20 +40,15 @@ public class LandscapeResource {
 	@GET
 	@Path("/by-timestamp")
 	@Produces(MEDIA_TYPE)
-	public Landscape getLandscapeByTimestamp(@QueryParam("timestamp") final String timestamp) {
+	public String getLandscapeByTimestamp(@QueryParam("timestamp") final String timestamp) {
 		return this.landscapeMongoService.findEntityByTimestamp(timestamp).get();
 	}
 
 	@POST
 	@Consumes(MEDIA_TYPE)
 	@Produces(MEDIA_TYPE)
-	@Path("/by-timestamp")
-	public Landscape importLandscape(@QueryParam("landscape") final Landscape landscape) {
-
-		if (landscape.getId() != null) {
-			throw new BadRequestException("Can't create sequence with id. Payload must not have an id.");
-		}
-		
+	@Path("/import")
+	public String importLandscape(@QueryParam("landscape") final String landscape) {
 		try {
 			return 	this.landscapeMongoService.saveNewEntity(landscape)
 					.orElseThrow(() -> new InternalServerErrorException());

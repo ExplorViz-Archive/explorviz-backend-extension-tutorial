@@ -2,23 +2,20 @@ package net.explorviz.extension.tutorial.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
-import javax.ws.rs.InternalServerErrorException;
 
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.jasminb.jsonapi.exceptions.DocumentSerializationException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 import net.explorviz.extension.tutorial.server.injection.LandscapeDatastore;
-import net.explorviz.extension.tutorial.server.resources.LandscapeResource;
-import net.explorviz.extension.tutorial.util.LandscapeSerializationHelper;
-import net.explorviz.shared.landscape.model.landscape.Landscape;
 
 /**
  * Stores and retrieves landscapes from a mongodb, which is given in the
@@ -39,31 +36,31 @@ import net.explorviz.shared.landscape.model.landscape.Landscape;
  *
  * </p>
  */
-public class LandscapeMongoService implements MongoCrudService<Landscape> {
-	
-	@Inject
-    private LandscapeSerializationHelper serializationHelper;// NOPMD
-    
+public class LandscapeMongoService implements MongoCrudService<String> {
+	  
     @Inject
     private LandscapeDatastore landscapeDatastore; // NOPMD
     
     private static final Logger LOGGER = LoggerFactory.getLogger(LandscapeMongoService.class.getSimpleName());
 
     
+    public static String getTimestampFromLandscape(String landscapejson) {
+    	Pattern p = Pattern.compile("\\\\\\\"timestamp\\\\\\\"\\:(\\d+)");
+    	Matcher m = p.matcher(landscapejson);
+        if (m.find()) {
+        	return m.group();
+        }else {
+        	return null;
+        }
+    }
+    
     @Override
-	public Optional<Landscape> saveNewEntity(Landscape landscape) {
-		 String landscapeJsonApi;
-		    try {
-		      landscapeJsonApi = this.serializationHelper.serialize(landscape);
-		    } catch (final DocumentSerializationException e) {
-		      throw new InternalServerErrorException("Error serializing: " + e.getMessage(), e);
-		    }
-
+	public Optional<String> saveNewEntity(String landscape) {
 		    final MongoCollection<Document> landscapeCollection = this.landscapeDatastore.getLandscapeCollection();
 
 		    final Document landscapeDocument = new Document();
-		    landscapeDocument.append(LandscapeDatastore.FIELD_ID, landscape.getTimestamp());
-		    landscapeDocument.append(LandscapeDatastore.FIELD_LANDSCAPE, landscapeJsonApi);
+		    landscapeDocument.append(LandscapeDatastore.FIELD_ID, getTimestampFromLandscape(landscape));
+		    landscapeDocument.append(LandscapeDatastore.FIELD_LANDSCAPE, landscape);
 
 		    try {
 		      landscapeCollection.insertOne(landscapeDocument);
@@ -74,25 +71,25 @@ public class LandscapeMongoService implements MongoCrudService<Landscape> {
 		      }
 		    }
 		    if (LOGGER.isInfoEnabled()) {
-		      LOGGER.info(String.format("Saved landscape {timestamp: %d, id: %s}",
-		    		  landscape.getTimestamp(), landscape.getId()));
+		      LOGGER.info(String.format("Saved landscape {timestamp: %d}",
+		    		  getTimestampFromLandscape(landscape)));
 		    }
 	        return Optional.ofNullable(landscape);
 	}
 
 	@Override
-	public void updateEntity(Landscape landscape) {
+	public void updateEntity(String landscape) {
 			
 	}
 
 	@Override
-	public Optional<Landscape> getEntityById(Long id) {
+	public Optional<String> getEntityById(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Landscape> getAll() {
+	public List<String> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -104,7 +101,7 @@ public class LandscapeMongoService implements MongoCrudService<Landscape> {
 	}
 
 	@Override
-	public Optional<Landscape> findEntityByFieldValue(String field, Object value) {
+	public Optional<String> findEntityByFieldValue(String field, Object value) {
 		final MongoCollection<Document> landscapeCollection = this.landscapeDatastore.getLandscapeCollection();
 
 		final Document landscapeDocument = new Document();
@@ -113,11 +110,7 @@ public class LandscapeMongoService implements MongoCrudService<Landscape> {
 		    final FindIterable<Document> result = landscapeCollection.find(landscapeDocument);
 
 		    if (result.first() != null) {
-		    	try {
-		      return Optional.ofNullable(serializationHelper.deserialize(result.first().getString(LandscapeDatastore.FIELD_LANDSCAPE)));
-		    	}catch (DocumentSerializationException e) {
-				      throw new ClientErrorException("An error occured loading the landscape for provided "+ field+" " + value, 404);
-				}
+		    	return Optional.ofNullable(result.first().getString(LandscapeDatastore.FIELD_LANDSCAPE));
 		    } else {
 		      throw new ClientErrorException("Landscape not found for provided "+ field+" " + value, 404);
 		    }		
@@ -135,7 +128,7 @@ public class LandscapeMongoService implements MongoCrudService<Landscape> {
 		return this.entityExistsByFieldValue("_id",value);
 	}
 	
-	public Optional<Landscape> findEntityByTimestamp(String value) {
+	public Optional<String> findEntityByTimestamp(String value) {
 		return this.findEntityByFieldValue("_id",value);
 	}
 
