@@ -123,11 +123,11 @@ public class LandscapeMongoService implements MongoCrudService<String> {
 
 		    final FindIterable<Document> result = landscapeCollection.find(landscapeDocument);
 
-		    if (result.first() != null) {
-		    	return Optional.ofNullable(result.first().getString(LandscapeDatastore.FIELD_LANDSCAPE));
-		    } else {
-		      throw new ClientErrorException("Landscape not found for provided "+ field+" " + value, 404);
-		    }		
+		if (result.first() != null) {
+		    return Optional.ofNullable(result.first().getString(LandscapeDatastore.FIELD_LANDSCAPE));
+		} else {
+	    	return Optional.empty();
+		}		
 	}
 
 	public boolean entityExistsByFieldValue(String field, Object value) {

@@ -1,6 +1,13 @@
 package net.explorviz.extension.tutorial.server.resources;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -26,6 +33,7 @@ import com.mongodb.MongoException;
 import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.extension.tutorial.services.LandscapeMongoService;
 import net.explorviz.extension.tutorial.services.TutorialMongoCrudService;
+import net.explorviz.shared.config.helper.PropertyHelper;
 
 @Path("v1/tutorials")
 public class TutorialResource {
@@ -102,7 +110,7 @@ public class TutorialResource {
 	@Path("{id}")
 	@Produces(MEDIA_TYPE)
 	@Consumes(MEDIA_TYPE)
-	public Tutorial updateTutorial(@PathParam("id") final Long id, final Tutorial updatedTutorial) { // NOPMD
+	public Tutorial updateTutorial(@PathParam("id") final Long id, final Tutorial updatedTutorial) throws IOException { // NOPMD
 		Tutorial targetTutorial = null;
 		try {
 			targetTutorial = this.tutorialCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
@@ -129,7 +137,31 @@ public class TutorialResource {
 			if (updatedTutorial.getLandscapeTimestamp().equals("")) {
 				throw new BadRequestException(MSG_INVALID_LANDSCAPE);
 			}
-			landscapeMongoService.findEntityByTimestamp(updatedTutorial.getLandscapeTimestamp());
+			
+//			Optional<String> landscape = landscapeMongoService.findEntityByTimestamp(updatedTutorial.getLandscapeTimestamp());
+//			if(!landscape.isPresent()){
+//				Integer port = 8080;
+//				  try {
+//				      port = PropertyHelper.getIntegerProperty("landscape.port");
+//				    } catch (final NumberFormatException e) {
+//				      if (LOGGER.isInfoEnabled()) {
+//				        LOGGER.info(
+//				            "ATTENTION: Using default port "+port+". Check explorviz.properties file.",
+//				            e);
+//				      }				
+//				    }
+//				  
+//				    String url =  PropertyHelper.getStringProperty("landscape.url");
+//	                String host = PropertyHelper.getStringProperty("landscape.host");
+//	                URL oracle = new URL("http://"+host+":"+port+url+updatedTutorial.getLandscapeTimestamp()); // URL to Parse
+//		            URLConnection yc = oracle.openConnection();
+//		            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+//		            
+//		            String inputLine;
+//		            while ((inputLine = in.readLine()) != null) {
+//		            	System.out.println(inputLine);
+//		            }
+//			}
 			targetTutorial.setLandscapeTimestamp(updatedTutorial.getLandscapeTimestamp());
 		}
 		

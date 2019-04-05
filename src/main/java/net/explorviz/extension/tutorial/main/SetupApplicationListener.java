@@ -72,7 +72,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
 		final Step step2 = new Step();
 		step2.setId(2L);
 		step2.setTitle("Step2");
-		this.datastore.save(step);
+		this.datastore.save(step2);
 		
 		final Sequence seq = new Sequence();
 		seq.setId(1L);
