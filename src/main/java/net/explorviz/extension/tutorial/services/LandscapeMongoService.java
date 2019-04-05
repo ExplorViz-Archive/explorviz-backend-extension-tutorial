@@ -1,5 +1,8 @@
 package net.explorviz.extension.tutorial.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -12,6 +15,7 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mongodb.DBCursor;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
@@ -54,6 +58,12 @@ public class LandscapeMongoService implements MongoCrudService<String> {
         }
     }
     
+    public static Matcher getDataAndIncludedFromLandscape(String landscapejson) {
+    	Pattern p = Pattern.compile("^\\{\\\"data\\\"\\:(.*(?=\\,\\\"included\\\"\\:))\\,\\\"included\\\"\\:\\[(.*(?=\\]\\}$))");
+    	Matcher m = p.matcher(landscapejson);
+        return m;
+    }
+    
     @Override
 	public Optional<String> saveNewEntity(String landscape) {
 		    final MongoCollection<Document> landscapeCollection = this.landscapeDatastore.getLandscapeCollection();
@@ -90,8 +100,12 @@ public class LandscapeMongoService implements MongoCrudService<String> {
 
 	@Override
 	public List<String> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		FindIterable<Document> col = this.landscapeDatastore.getLandscapeCollection().find();
+		List<String> list = new LinkedList<String>();
+		for(Document d: col) {
+			list.add(d.getString(LandscapeDatastore.FIELD_LANDSCAPE));
+		}
+		return list;
 	}
 
 	@Override

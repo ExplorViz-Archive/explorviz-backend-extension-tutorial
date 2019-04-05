@@ -26,6 +26,7 @@ public class ResourceConverterFactory implements Factory<ResourceConverter> {
 		resourceConverter.registerType(Sequence.class);
 		resourceConverter.registerType(Step.class);
 
+		
 		this.converter = resourceConverter;
 		this.converter.enableSerializationOption(SerializationFeature.INCLUDE_RELATIONSHIP_ATTRIBUTES);
 

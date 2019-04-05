@@ -1,5 +1,8 @@
 package net.explorviz.extension.tutorial.server.resources;
 
+import java.util.List;
+import java.util.regex.Matcher;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -17,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
+import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.services.LandscapeMongoService;
 
 /**
@@ -60,6 +64,35 @@ public class LandscapeResource {
 			}
 			throw new InternalServerErrorException(ex);
 		}
+	}
+	
+
+	@GET
+	@Produces(MEDIA_TYPE)
+	public String landscapesAll() {
+		List<String> foundLandscapes = null;
+		try {
+			foundLandscapes = this.landscapeMongoService.getAll();
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not retrieve all sequences: " + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+		String data ="";
+		String included ="";
+		for(String landscape:foundLandscapes) {
+			System.out.println(landscape);
+			Matcher m=this.landscapeMongoService.getDataAndIncludedFromLandscape(landscape);
+			m.find();
+			if(m.groupCount()==2){
+				included+=m.group(2)+",";
+				data+=m.group(1)+",";
+			}
+		}
+		data="{\"data\":"+data.substring(0, data.length()-1)+",";
+		included="\"included\":["+included.substring(0, included.length()-1)+"]}";
+		return data+included;
 	}
 
 }

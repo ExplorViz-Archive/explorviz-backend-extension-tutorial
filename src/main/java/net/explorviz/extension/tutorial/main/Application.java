@@ -5,7 +5,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 import net.explorviz.extension.tutorial.server.providers.JsonApiListProvider;
 import net.explorviz.extension.tutorial.server.providers.JsonApiProvider;
 import net.explorviz.extension.tutorial.server.providers.ResourceConverterFactory;
-import net.explorviz.extension.tutorial.server.providers.UserJsonApiDeserializer;
 import net.explorviz.extension.tutorial.server.resources.LandscapeResource;
 import net.explorviz.extension.tutorial.server.resources.SequenceResource;
 import net.explorviz.extension.tutorial.server.resources.StepResource;
@@ -40,8 +39,7 @@ public class Application extends ResourceConfig {
 		this.register(GeneralExceptionMapper.class);
 
 		this.register(SetupApplicationListener.class);
-
-		this.register(UserJsonApiDeserializer.class);
+		
 		this.register(JsonApiProvider.class);
 		this.register(JsonApiListProvider.class);
 		this.register(ResourceConverterFactory.class);
