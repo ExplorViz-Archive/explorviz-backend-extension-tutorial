@@ -2,6 +2,7 @@ package net.explorviz.extension.tutorial.main;
 
 import org.glassfish.jersey.server.ResourceConfig;
 
+import net.explorviz.extension.tutorial.model.TutorialLandscape;
 import net.explorviz.extension.tutorial.server.providers.JsonApiListProvider;
 import net.explorviz.extension.tutorial.server.providers.JsonApiProvider;
 import net.explorviz.extension.tutorial.server.providers.ResourceConverterFactory;
@@ -49,6 +50,7 @@ public class Application extends ResourceConfig {
 		this.register(SequenceResource.class);
 		this.register(StepResource.class);
 		this.register(LandscapeResource.class);
+
 
 	}
 

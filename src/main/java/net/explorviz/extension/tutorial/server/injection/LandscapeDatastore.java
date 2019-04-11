@@ -1,5 +1,8 @@
 package net.explorviz.extension.tutorial.server.injection;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.bson.Document;
@@ -9,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+
+import net.explorviz.extension.tutorial.model.TutorialLandscape;
 
 public class LandscapeDatastore {
 	
@@ -51,9 +56,16 @@ public class LandscapeDatastore {
 	    return this.client;
 	  }
 
-
-	 public MongoCollection<Document> getLandscapeCollection() {
-		return this.getDatabase().getCollection("landscape");
+	  public  MongoCollection<Document> getLandscapeCollection() {
+			return this.getDatabase().getCollection("landscape");
+		 }
+	 public List<TutorialLandscape> getLandscapeList() {
+		 MongoCollection<Document> docs = this.getDatabase().getCollection("landscape");
+		 LinkedList<TutorialLandscape> list= new LinkedList<>();
+		 for(Document doc: docs.find()) {
+			 list.add(new TutorialLandscape(doc.getString(FIELD_ID),doc.getString(FIELD_LANDSCAPE)));
+		 } 
+		return list;
 	 }
 	 
 	  

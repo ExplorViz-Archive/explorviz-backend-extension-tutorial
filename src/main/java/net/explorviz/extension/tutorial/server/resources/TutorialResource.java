@@ -78,7 +78,6 @@ public class TutorialResource {
 			throw new InternalServerErrorException(ex);
 		}
 		;
-		foundTutorial.setLandscape(landscapeMongoService.findEntityByTimestamp(foundTutorial.getLandscapeTimestamp()).get());
 		LOGGER.info("Delivered: " +foundTutorial.getId() );
 		return foundTutorial;
 	}
