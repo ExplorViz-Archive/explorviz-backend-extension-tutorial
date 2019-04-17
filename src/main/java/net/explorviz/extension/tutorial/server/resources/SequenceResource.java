@@ -48,11 +48,7 @@ public class SequenceResource {
 	@GET
 	@Path("{id}")
 	@Produces(MEDIA_TYPE)
-	public Sequence sequenceById(@PathParam("id") final Long id) {
-		if (id == null || id <= 0) {
-			throw new BadRequestException("Id must be positive integer");
-		}
-
+	public Sequence sequenceById(@PathParam("id") final String id) {
 		Sequence foundSequence = null;
 
 		try {
@@ -87,7 +83,7 @@ public class SequenceResource {
 	@Path("{id}")
 	@Produces(MEDIA_TYPE)
 	@Consumes(MEDIA_TYPE)
-	public Sequence updateSequence(@PathParam("id") final Long id, final Sequence updatedSequence) { // NOPMD
+	public Sequence updateSequence(@PathParam("id") final String id, final Sequence updatedSequence) { // NOPMD
 		Sequence targetSequence = null;
 		try {
 			targetSequence = this.sequenceCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
@@ -133,7 +129,7 @@ public class SequenceResource {
 	 */
 	@DELETE
 	@Path("{id}")
-	public Response removeSequence(@PathParam("id") final Long id) {
+	public Response removeSequence(@PathParam("id") final String id) {
 		try {
 			this.sequenceCrudService.deleteEntityById(id);
 		} catch (final MongoException ex) {

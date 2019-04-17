@@ -1,19 +1,22 @@
 package net.explorviz.extension.tutorial.server.resources;
 
-import java.util.Optional;
+import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,53 +24,134 @@ import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
 import net.explorviz.extension.tutorial.model.TutorialLandscape;
-import net.explorviz.extension.tutorial.services.LandscapeMongoService;
-import net.explorviz.shared.landscape.model.landscape.Landscape;
+import net.explorviz.extension.tutorial.services.TutorialLandscapeMongoCrudService;
 
-/**
- * Resource providing {@link Landscape} data for the frontend.
- */
 @Path("v1/tutorials/landscapes")
-@RolesAllowed({ "admin" })
 public class LandscapeResource {
-	
-	
-
 	private static final String MEDIA_TYPE = "application/vnd.api+json";
-	private static final String MSG_LANDSCAPE_NOT_SAVED = "Could not import landscape.";
 
-	@Inject
-	private LandscapeMongoService landscapeMongoService;
-	
+	private static final String MSG_INVALID_TITLE = "Invalid title";
+	private static final String MSG_TUTORIAL_NOT_RETRIEVED = "Could not retrieve tutorialLandscape ";
+	private static final String MSG_TUTORIAL_NOT_UPDATED = "Could not update tutorialLandscape ";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(LandscapeResource.class);
 
+	@Inject
+	private TutorialLandscapeMongoCrudService tutorialLandscapeCrudService;
+
+	/**
+	 * Retrieves a single tutorialLandscape identified by its id.
+	 *
+	 * @param id the id of the tutorialLandscape to return
+	 * @return the {@link TutorialLandscape} object with the given id
+	 */
+	@GET
+	@Path("{id}")
+	@Produces(MEDIA_TYPE)
+	public TutorialLandscape tutorialLandscapeById(@PathParam("id") final String id) {
+		TutorialLandscape foundTutorialLandscape = null;
+
+		try {
+			foundTutorialLandscape = this.tutorialLandscapeCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not retrieve tutorialLandscape: " + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+
+		return foundTutorialLandscape;
+	}
 
 	@GET
-	@Path("/by-timestamp")
 	@Produces(MEDIA_TYPE)
-	public TutorialLandscape getLandscapeByTimestamp(@QueryParam("timestamp") final String timestamp) {
-		Optional<TutorialLandscape> opt = this.landscapeMongoService.findEntityByTimestamp(timestamp);
-		if(opt.isPresent()) {
-			return opt.get();
+	public List<TutorialLandscape> tutorialLandscapesAll() {
+		List<TutorialLandscape> foundTutorialLandscapes = null;
+
+		try {
+			foundTutorialLandscapes = this.tutorialLandscapeCrudService.getAll();
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not retrieve all tutorialLandscapes: " + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
 		}
-		throw new BadRequestException();
+		return foundTutorialLandscapes;
+	}
+
+	@PATCH
+	@Path("{id}")
+	@Produces(MEDIA_TYPE)
+	@Consumes(MEDIA_TYPE)
+	public TutorialLandscape updateTutorialLandscape(@PathParam("id") final String id, final TutorialLandscape updatedTutorialLandscape) { // NOPMD
+		TutorialLandscape targetTutorialLandscape = null;
+		try {
+			targetTutorialLandscape = this.tutorialLandscapeCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(MSG_TUTORIAL_NOT_RETRIEVED + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+
+		if (updatedTutorialLandscape.getId() != null || updatedTutorialLandscape.getId() != id) { // NOPMD
+			LOGGER.info("Won't update id");
+		}
+
+			targetTutorialLandscape.setLandscape(updatedTutorialLandscape.getLandscape());
+			targetTutorialLandscape.setTimestamp(updatedTutorialLandscape.getTimestamp());
+			
+		try {
+			this.tutorialLandscapeCrudService.updateEntity(targetTutorialLandscape);
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(MSG_TUTORIAL_NOT_UPDATED + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+
+		return targetTutorialLandscape;
+	}
+
+	/**
+	 * Removes the user with the given id.
+	 *
+	 * @param id the id of the user to delete
+	 */
+	@DELETE
+	@Path("{id}")
+	public Response removeTutorialLandscape(@PathParam("id") final String id) {
+		try {
+			this.tutorialLandscapeCrudService.deleteEntityById(id);
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not update tutorialLandscape: " + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+
+		return Response.status(HttpStatus.NO_CONTENT_204).build();
 	}
 
 	@POST
 	@Consumes(MEDIA_TYPE)
 	@Produces(MEDIA_TYPE)
-	@Path("/import")
-	public TutorialLandscape importLandscape(final TutorialLandscape landscape) {
-		
+	public TutorialLandscape newTutorialLandscape(final TutorialLandscape tutorialLandscape) { // NOPMD
+
+		if (tutorialLandscape.getId() != null) {
+			throw new BadRequestException("Can't create tutorialLandscape with id. Payload must not have an id.");
+		}
+
 		try {
-			return 	this.landscapeMongoService.saveNewEntity(landscape).get();
-			} catch (final DuplicateKeyException ex) {
-			throw new BadRequestException("Sequence already exists", ex);
+			return this.tutorialLandscapeCrudService.saveNewEntity(tutorialLandscape).orElseThrow(() -> new InternalServerErrorException());
+		} catch (final DuplicateKeyException ex) {
+			throw new BadRequestException("TutorialLandscape already exists", ex);
 		} catch (final MongoException ex) {
 			if (LOGGER.isErrorEnabled()) {
-				LOGGER.error(MSG_LANDSCAPE_NOT_SAVED + ex.getMessage() + " (" + ex.getCode() + ")");
+				LOGGER.error(MSG_TUTORIAL_NOT_RETRIEVED + ex.getMessage() + " (" + ex.getCode() + ")");
 			}
 			throw new InternalServerErrorException(ex);
 		}
 	}
+
 }

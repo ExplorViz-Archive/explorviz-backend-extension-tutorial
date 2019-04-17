@@ -19,8 +19,8 @@ import xyz.morphia.annotations.Reference;
 public class Sequence {
 
 	@Id
-	@com.github.jasminb.jsonapi.annotations.Id(LongIdHandler.class)
-	private Long id;
+	@com.github.jasminb.jsonapi.annotations.Id
+	private String id;
 
 	@Indexed(options = @IndexOptions(unique = true))
 	private String title;
@@ -34,11 +34,11 @@ public class Sequence {
 	private String action;
 	// private final Landscape landscape;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(final Long id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 

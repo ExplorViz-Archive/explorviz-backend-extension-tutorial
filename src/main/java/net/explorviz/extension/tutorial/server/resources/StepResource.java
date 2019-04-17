@@ -48,11 +48,7 @@ public class StepResource {
 	@GET
 	@Path("{id}")
 	@Produces(MEDIA_TYPE)
-	public Step stepById(@PathParam("id") final Long id) {
-		if (id == null || id <= 0) {
-			throw new BadRequestException("Id must be positive integer");
-		}
-
+	public Step stepById(@PathParam("id") final String id) {
 		Step foundStep = null;
 
 		try {
@@ -87,7 +83,7 @@ public class StepResource {
 	@Path("{id}")
 	@Produces(MEDIA_TYPE)
 	@Consumes(MEDIA_TYPE)
-	public Step updateStep(@PathParam("id") final Long id, final Step updatedStep) { // NOPMD
+	public Step updateStep(@PathParam("id") final String id, final Step updatedStep) { // NOPMD
 		Step targetStep = null;
 		try {
 			targetStep = this.stepCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
@@ -131,7 +127,7 @@ public class StepResource {
 	 */
 	@DELETE
 	@Path("{id}")
-	public Response removeStep(@PathParam("id") final Long id) {
+	public Response removeStep(@PathParam("id") final String id) {
 		try {
 			this.stepCrudService.deleteEntityById(id);
 		} catch (final MongoException ex) {

@@ -9,13 +9,13 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import com.github.jasminb.jsonapi.ResourceConverter;
 
 import net.explorviz.extension.tutorial.server.injection.DatastoreFactory;
-import net.explorviz.extension.tutorial.server.injection.LandscapeDatastore;
 import net.explorviz.extension.tutorial.server.injection.MongoConnection;
 import net.explorviz.extension.tutorial.server.providers.ResourceConverterFactory;
-import net.explorviz.extension.tutorial.services.LandscapeMongoService;
 import net.explorviz.extension.tutorial.services.SequenceMongoCrudService;
 import net.explorviz.extension.tutorial.services.StepMongoCrudService;
+import net.explorviz.extension.tutorial.services.TutorialLandscapeMongoCrudService;
 import net.explorviz.extension.tutorial.services.TutorialMongoCrudService;
+import net.explorviz.shared.common.idgen.IdGenerator;
 import net.explorviz.shared.config.annotations.ConfigValues;
 import net.explorviz.shared.config.annotations.injection.ConfigInjectionResolver;
 import net.explorviz.shared.config.annotations.injection.ConfigValuesInjectionResolver;
@@ -38,19 +38,18 @@ public class DependencyInjectionBinder extends AbstractBinder {
 		});
 		this.bind(new ConfigValuesInjectionResolver()).to(new TypeLiteral<InjectionResolver<ConfigValues>>() {
 		});
+	    this.bind(IdGenerator.class).to(IdGenerator.class).in(Singleton.class);
 
 		this.bindFactory(ResourceConverterFactory.class).to(ResourceConverter.class).in(Singleton.class);
 
 		this.bind(MongoConnection.class).to(MongoConnection.class).in(Singleton.class);
-		this.bind(LandscapeDatastore.class).to(LandscapeDatastore.class).in(Singleton.class);
 
 		this.bindFactory(DatastoreFactory.class).to(Datastore.class).in(Singleton.class);
-
 		
 		this.bind(TutorialMongoCrudService.class).to(TutorialMongoCrudService.class).in(Singleton.class);
 		this.bind(SequenceMongoCrudService.class).to(SequenceMongoCrudService.class).in(Singleton.class);
 		this.bind(StepMongoCrudService.class).to(StepMongoCrudService.class).in(Singleton.class);
-		this.bind(LandscapeMongoService.class).to(LandscapeMongoService.class).in(Singleton.class);
+		this.bind(TutorialLandscapeMongoCrudService.class).to(TutorialLandscapeMongoCrudService.class).in(Singleton.class);
 
 		// ErrorObject Handler
 		this.bind(ErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);

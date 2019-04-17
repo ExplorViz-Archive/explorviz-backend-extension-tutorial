@@ -15,8 +15,8 @@ import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.extension.tutorial.model.TutorialLandscape;
-import net.explorviz.extension.tutorial.services.LandscapeMongoService;
-import net.explorviz.extension.tutorial.util.PasswordStorage.CannotPerformOperationException;
+import net.explorviz.extension.tutorial.model.TutorialTimestamp;
+import net.explorviz.extension.tutorial.services.TutorialLandscapeMongoCrudService;
 import xyz.morphia.Datastore;
 
 /**
@@ -25,6 +25,17 @@ import xyz.morphia.Datastore;
 @WebListener
 public class SetupApplicationListener implements ApplicationEventListener {
 
+	  @SuppressWarnings("serial")
+	  public static class CannotPerformOperationException extends Exception {
+	    public CannotPerformOperationException(final String message) {
+	      super(message);
+	    }
+
+	    public CannotPerformOperationException(final String message, final Throwable source) {
+	      super(message, source);
+	    }
+	  }
+	  
 	private static final Logger LOGGER = LoggerFactory.getLogger(SetupApplicationListener.class);
 
 	@Inject
@@ -32,7 +43,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
 	
 	
 	@Inject
-	private LandscapeMongoService landscapeMongoService;
+	private TutorialLandscapeMongoCrudService landscapeMongoService;
 	
 
 	@Override
@@ -64,31 +75,31 @@ public class SetupApplicationListener implements ApplicationEventListener {
 
 
 		final Step step = new Step();
-		step.setId(1L);
+		step.setId("step-1");
 		step.setTitle("Step1");
 		this.datastore.save(step);
 		final Step step2 = new Step();
-		step2.setId(2L);
+		step2.setId("step-2");
 		step2.setTitle("Step2");
 		this.datastore.save(step2);
 		
 		final Sequence seq = new Sequence();
-		seq.setId(1L);
+		seq.setId("Sequence-1");
 		seq.setTitle("Sequence1");
 		seq.addStep(step);
 		seq.addStep(step2);
 		this.datastore.save(seq);
-		if(!this.landscapeMongoService.getEntityById(1553961723688L).isPresent()){
+		if(!this.landscapeMongoService.getEntityById("landscape-5-1").isPresent()){
 			String jsonlandscape= "{\"data\":{\"type\":\"landscape\",\"id\":\"landscape-5-1\",\"attributes\":{\"extensionAttributes\":{}},\"relationships\":{\"timestamp\":{\"data\":{\"type\":\"timestamp\",\"id\":\"landscape-5-967\"}},\"systems\":{\"data\":[]},\"events\":{\"data\":[]},\"totalApplicationCommunications\":{\"data\":[]}}},\"included\":[{\"type\":\"timestamp\",\"id\":\"landscape-5-967\",\"attributes\":{\"extensionAttributes\":{},\"timestamp\":1553961723688,\"totalRequests\":0}}]}";
 			TutorialLandscape tutlandscape = new TutorialLandscape();
-			tutlandscape.setTimestamp("1553961723688");
+			tutlandscape.setTimestamp(new TutorialTimestamp("1553961723688","Empty Landscape"));
 			tutlandscape.setLandscape(jsonlandscape);
 			this.landscapeMongoService.saveNewEntity(tutlandscape);
 		}
 		
 		final Tutorial tutorial = new Tutorial();
 		tutorial.setLandscapeTimestamp("1553961723688");
-		tutorial.setId(1L);
+		tutorial.setId("tutorial-1");
 		tutorial.setTitle("First");
 		tutorial.setText("Testtext");
 		tutorial.addSequence(seq);
@@ -98,6 +109,6 @@ public class SetupApplicationListener implements ApplicationEventListener {
 		this.datastore.save(tutorial);
 
 	}
-
 }
+
 

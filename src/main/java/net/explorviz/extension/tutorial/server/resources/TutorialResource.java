@@ -31,7 +31,7 @@ import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
 import net.explorviz.extension.tutorial.model.Tutorial;
-import net.explorviz.extension.tutorial.services.LandscapeMongoService;
+import net.explorviz.extension.tutorial.services.TutorialLandscapeMongoCrudService;
 import net.explorviz.extension.tutorial.services.TutorialMongoCrudService;
 import net.explorviz.shared.config.helper.PropertyHelper;
 
@@ -51,7 +51,7 @@ public class TutorialResource {
 	private TutorialMongoCrudService tutorialCrudService;
 
 	@Inject
-	private LandscapeMongoService landscapeMongoService;
+	private TutorialLandscapeMongoCrudService landscapeMongoService;
 
 	/**
 	 * Retrieves a single tutorial identified by its id.
@@ -62,11 +62,7 @@ public class TutorialResource {
 	@GET
 	@Path("{id}")
 	@Produces(MEDIA_TYPE)
-	public Tutorial tutorialById(@PathParam("id") final Long id) {
-		if (id == null || id <= 0) {
-			throw new BadRequestException("Id must be positive integer");
-		}
-
+	public Tutorial tutorialById(@PathParam("id") final String id) {
 		Tutorial foundTutorial = null;
 
 		try {
@@ -109,7 +105,7 @@ public class TutorialResource {
 	@Path("{id}")
 	@Produces(MEDIA_TYPE)
 	@Consumes(MEDIA_TYPE)
-	public Tutorial updateTutorial(@PathParam("id") final Long id, final Tutorial updatedTutorial) throws IOException { // NOPMD
+	public Tutorial updateTutorial(@PathParam("id") final String id, final Tutorial updatedTutorial) throws IOException { // NOPMD
 		Tutorial targetTutorial = null;
 		try {
 			targetTutorial = this.tutorialCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
@@ -195,7 +191,7 @@ public class TutorialResource {
 	 */
 	@DELETE
 	@Path("{id}")
-	public Response removeTutorial(@PathParam("id") final Long id) {
+	public Response removeTutorial(@PathParam("id") final String id) {
 		try {
 			this.tutorialCrudService.deleteEntityById(id);
 		} catch (final MongoException ex) {

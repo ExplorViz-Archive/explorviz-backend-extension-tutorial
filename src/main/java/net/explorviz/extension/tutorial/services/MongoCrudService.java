@@ -2,7 +2,10 @@ package net.explorviz.extension.tutorial.services;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.jvnet.hk2.annotations.Service;
+
+import com.mongodb.MongoException;
 
 /**
  * Injectable service that manages create, read, update and delete operations for {@link T} objects.
@@ -14,7 +17,8 @@ public interface MongoCrudService<T> {
   /**
    * Persists a new entity object.
    *
-   * @param entity the entity to persist
+   * @param entity - the entity to persist
+   * @return optional - found entity
    */
   Optional<T> saveNewEntity(final T entity);
 
@@ -22,17 +26,17 @@ public interface MongoCrudService<T> {
   /**
    * Updates values of an existing entity.
    *
-   * @param entity the entity to update
+   * @param entity - the entity to update
    */
   void updateEntity(final T entity);
 
   /**
    * Retrieves an entity by its id.
    *
-   * @param id the id of the entity to find
+   * @param id - the id of the entity to find
    * @return optional the entity with the given id
    */
-  Optional<T> getEntityById(final Long id);
+  Optional<T> getEntityById(final String id);
 
 
   /**
@@ -46,16 +50,18 @@ public interface MongoCrudService<T> {
   /**
    * Deletes an entity.
    *
-   * @param id the id of the entity to delete
+   * @param id - the id of the entity to delete
+   * @throws UserCrudException if the user could not be deleted
+   * @throws MongoException
    */
-  void deleteEntityById(final Long id);
+  void deleteEntityById(final String id) throws TutorialCrudException;
 
 
   /**
    * Retrieves an entity by a field and its value.
    *
-   * @param field name of the entity
-   * @param value for the field
+   * @param field - name of the entity
+   * @param value - value for the field
    * @return optional - found entity
    */
   Optional<T> findEntityByFieldValue(String field, Object value);

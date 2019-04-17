@@ -1,7 +1,9 @@
 package net.explorviz.extension.tutorial.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -9,100 +11,101 @@ import org.jvnet.hk2.annotations.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mongodb.MongoException;
-
 import net.explorviz.extension.tutorial.model.Sequence;
-import net.explorviz.extension.tutorial.util.CountingIdGenerator;
-import net.explorviz.extension.tutorial.util.IdGenerator;
+import net.explorviz.shared.common.idgen.IdGenerator;
+import net.explorviz.shared.security.model.roles.Role;
 import xyz.morphia.Datastore;
 
 /**
- * Offers CRUD operations on user objects, backed by a MongoDB instance as
- * persistence layer. Each user has the following fields:
+ * Offers CRUD operations on sequence objects, backed by a MongoDB instance as persistence layer. Each
+ * sequence has the following fields:
  * <ul>
  * <li>id: the unique id of the sequence</li>
+ * <li>sequencename: name of the sequence, unique</li>
+ * <li>password: hashed password</li>
+ * <li>roles: list of role that are assigned to the sequence</li>
  * </ul>
  *
  */
 @Service
 public class SequenceMongoCrudService implements MongoCrudService<Sequence> {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(SequenceMongoCrudService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SequenceMongoCrudService.class);
 
-	private final IdGenerator<Long> idGen;
 
-	private final Datastore datastore;
 
-	/**
-	 * Creates a new {@code UserCrudMongoDb}.
-	 *
-	 */
-	@Inject
-	public SequenceMongoCrudService(final Datastore datastore) {
+  private final Datastore datastore;
 
-		this.datastore = datastore;
 
-		final Sequence sequenceWithMaxId = this.datastore.createQuery(Sequence.class).order("-id").get();
+  @Inject
+  private IdGenerator idGenerator;
 
-		// Create a new id generator, which will count upwards beginning from the max id
-		long counterInitValue = 0L;
+  /**
+   * Creates a new SequenceMongoDB
+   *
+   * @param datastore - the datastore instance
+   */
+  @Inject
+  public SequenceMongoCrudService(final Datastore datastore) {
 
-		if (sequenceWithMaxId != null) {
-			counterInitValue = sequenceWithMaxId.getId();
-		}
+    this.datastore = datastore;
+  }
 
-		this.idGen = new CountingIdGenerator(counterInitValue);
-	}
+  @Override
+  public List<Sequence> getAll() {
+    return this.datastore.createQuery(Sequence.class).asList();
+  }
 
-	@Override
-	public List<Sequence> getAll() {
-		return this.datastore.createQuery(Sequence.class).asList();
-	}
+  @Override
+  /**
+   * Persists an sequence entity
+   *
+   * @param sequence - a sequence entity
+   * @return an Optional, which contains a Sequence or is empty
+   */
+  public Optional<Sequence> saveNewEntity(final Sequence sequence) {
+    // Generate an id
+    sequence.setId(this.idGenerator.generateId());
 
-	@Override
-	public Optional<Sequence> saveNewEntity(final Sequence sequence) throws MongoException {
-		// Generate an id
-		sequence.setId(this.idGen.next());
+    this.datastore.save(sequence);
 
-		this.datastore.save(sequence);
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("Inserted new sequence with id " + sequence.getId());
+    }
+    return Optional.ofNullable(sequence);
+  }
 
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("Inserted new sequence with id " + sequence.getId());
-		}
-		return Optional.ofNullable(sequence);
-	}
+  @Override
+  public void updateEntity(final Sequence sequence) {
+    this.datastore.save(sequence);
+  }
 
-	@Override
-	public void updateEntity(final Sequence sequence) throws MongoException {
-		this.datastore.save(sequence);
+  @Override
+  public Optional<Sequence> getEntityById(final String id) {
 
-	}
+    final Sequence sequenceObject = this.datastore.get(Sequence.class, id);
 
-	@Override
-	public Optional<Sequence> getEntityById(final Long id) throws MongoException {
+    return Optional.ofNullable(sequenceObject);
+  }
 
-		final Sequence sequenceObject = this.datastore.get(Sequence.class, id);
+  @Override
+  public void deleteEntityById(final String id){
+    this.datastore.delete(Sequence.class, id);
 
-		return Optional.ofNullable(sequenceObject);
-	}
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("Deleted sequence with id " + id);
+    }
+  }
 
-	@Override
-	public void deleteEntityById(final Long id) throws MongoException {
+  
+  @Override
+  public Optional<Sequence> findEntityByFieldValue(final String field, final Object value) {
 
-		this.datastore.delete(Sequence.class, id);
+    final Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter(field, value).get();
 
-		if (LOGGER.isInfoEnabled()) {
-			LOGGER.info("Deleted sequence with id " + id);
-		}
+    return Optional.ofNullable(foundSequence);
+  }
 
-	}
 
-	@Override
-	public Optional<Sequence> findEntityByFieldValue(final String field, final Object value) {
-
-		final Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter(field, value).get();
-
-		return Optional.ofNullable(foundSequence);
-	}
 
 }

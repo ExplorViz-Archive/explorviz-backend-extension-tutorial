@@ -17,7 +17,7 @@ configurations.all {
 }
 
 ext {	
-	expSharedVersion = "v1.3.1"
+	expSharedVersion = "v1.3.12"
 }
 
 dependencies {
