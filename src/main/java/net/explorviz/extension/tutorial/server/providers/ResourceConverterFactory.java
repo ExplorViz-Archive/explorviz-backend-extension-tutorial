@@ -10,6 +10,7 @@ import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.extension.tutorial.model.TutorialLandscape;
+import net.explorviz.extension.tutorial.model.TutorialTimestamp;
 
 /**
  * Factory for creating resource converts for JSON conversion.
@@ -26,6 +27,7 @@ public class ResourceConverterFactory implements Factory<ResourceConverter> {
 		resourceConverter.registerType(Tutorial.class);
 		resourceConverter.registerType(Sequence.class);
 		resourceConverter.registerType(Step.class);
+		resourceConverter.registerType(TutorialTimestamp.class);
 		resourceConverter.registerType(TutorialLandscape.class);
 		
 		this.converter = resourceConverter;

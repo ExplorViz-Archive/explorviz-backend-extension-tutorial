@@ -26,7 +26,7 @@ import com.mongodb.MongoException;
 import net.explorviz.extension.tutorial.model.TutorialTimestamp;
 import net.explorviz.extension.tutorial.services.TutorialTimestampMongoCrudService;
 
-@Path("v1/tutorials/landscapes")
+@Path("v1/tutorials/timestamps")
 public class TimestampResource {
 	private static final String MEDIA_TYPE = "application/vnd.api+json";
 
@@ -94,9 +94,9 @@ public class TimestampResource {
 			throw new InternalServerErrorException(ex);
 		}
 
-		if (updatedTutorialTimestamp.getId() != null || updatedTutorialTimestamp.getId() != id) { // NOPMD
-			LOGGER.info("Won't update id");
-		}
+//		if (updatedTutorialTimestamp.getId() != null || updatedTutorialTimestamp.getId() != id) { // NOPMD
+//			LOGGER.info("Won't update id");
+//		}
 
 			targetTutorialTimestamp.setName(updatedTutorialTimestamp.getName());
 			targetTutorialTimestamp.setTimestamp(updatedTutorialTimestamp.getTimestamp());
@@ -138,9 +138,27 @@ public class TimestampResource {
 	@Produces(MEDIA_TYPE)
 	public TutorialTimestamp newTutorialTimestamp(final TutorialTimestamp tutorialTutorialTimestamp) { // NOPMD
 
-		if (tutorialTutorialTimestamp.getId() != null) {
-			throw new BadRequestException("Can't create tutorialTutorialTimestamp with id. Payload must not have an id.");
+//		if (tutorialTutorialTimestamp.getId() != null) {
+//			throw new BadRequestException("Can't create tutorialTutorialTimestamp with id. Payload must not have an id.");
+//		}
+
+		try {
+			return this.tutorialTutorialTimestampCrudService.saveNewEntity(tutorialTutorialTimestamp).orElseThrow(() -> new InternalServerErrorException());
+		} catch (final DuplicateKeyException ex) {
+			throw new BadRequestException("TutorialTimestamp already exists", ex);
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(MSG_TUTORIAL_NOT_RETRIEVED + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
 		}
+	}
+	
+	@POST
+	@Path("/import")
+	@Consumes(MEDIA_TYPE)
+	@Produces(MEDIA_TYPE)
+	public TutorialTimestamp importTutorialTimestamp(final TutorialTimestamp tutorialTutorialTimestamp) { // NOPMD
 
 		try {
 			return this.tutorialTutorialTimestampCrudService.saveNewEntity(tutorialTutorialTimestamp).orElseThrow(() -> new InternalServerErrorException());

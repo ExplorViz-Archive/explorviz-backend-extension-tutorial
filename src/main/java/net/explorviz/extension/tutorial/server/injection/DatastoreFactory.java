@@ -7,6 +7,8 @@ import org.glassfish.hk2.api.Factory;
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
+import net.explorviz.extension.tutorial.model.TutorialLandscape;
+import net.explorviz.extension.tutorial.model.TutorialTimestamp;
 import xyz.morphia.Datastore;
 import xyz.morphia.Morphia;
 
@@ -22,8 +24,8 @@ public class DatastoreFactory implements Factory<Datastore> {
 	public DatastoreFactory(MongoConnection mongoclient) {
 		final Morphia morphia = new Morphia();
 		// Map the model classes
-		morphia.map(Tutorial.class, Sequence.class, Step.class);
-		this.datastore = morphia.createDatastore(mongoclient, "explorviz");
+		morphia.map(Tutorial.class, Sequence.class, Step.class, TutorialLandscape.class,TutorialTimestamp.class);
+		this.datastore = morphia.createDatastore(mongoclient, "tutorial");
 		this.datastore.ensureIndexes();
 	}
 

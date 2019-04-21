@@ -1,9 +1,11 @@
 package net.explorviz.extension.tutorial.model;
 
+import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import xyz.morphia.annotations.Entity;
 import xyz.morphia.annotations.Id;
+import xyz.morphia.annotations.Reference;
 
 @Entity("tutoriallandscape")
 @Type("tutoriallandscape")
@@ -13,27 +15,28 @@ public class TutorialLandscape {
 	@com.github.jasminb.jsonapi.annotations.Id
 	private String id;
 	
-	
-	private TutorialTimestamp timestamp;
+	@Reference
+	@Relationship("tutorialtimestamp")
+	private TutorialTimestamp tutorialtimestamp;
 	
 	private String landscape;
-		
+	
 	public TutorialLandscape() {
 		
 	}
 	
-	public TutorialLandscape(String id,TutorialTimestamp timestamp,String landscape) {
+	public TutorialLandscape(String id,TutorialTimestamp tutorialtimestamp,String landscape) {
 		this.id=id;
-		this.timestamp=timestamp;
+		this.tutorialtimestamp=tutorialtimestamp;
 		this.landscape=landscape;
 	}
 	
 	public TutorialTimestamp getTimestamp() {
-		return timestamp;
+		return tutorialtimestamp;
 	}
 	
-	public void setTimestamp(TutorialTimestamp timestamp) {
-		this.timestamp = timestamp;
+	public void setTimestamp(TutorialTimestamp tutorialtimestamp) {
+		this.tutorialtimestamp = tutorialtimestamp;
 	}
 	
 	public String getLandscape() {

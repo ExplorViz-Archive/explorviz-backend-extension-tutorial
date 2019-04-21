@@ -1,5 +1,6 @@
 package net.explorviz.extension.tutorial.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import xyz.morphia.annotations.Reference;
 //import net.explorviz.model.landscape.Landscape;
 @Type("sequence")
 @Entity("sequence")
-public class Sequence {
+public class Sequence implements Serializable{
 
 	@Id
 	@com.github.jasminb.jsonapi.annotations.Id

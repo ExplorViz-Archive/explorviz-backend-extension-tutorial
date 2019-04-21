@@ -9,6 +9,7 @@ import net.explorviz.extension.tutorial.server.providers.ResourceConverterFactor
 import net.explorviz.extension.tutorial.server.resources.LandscapeResource;
 import net.explorviz.extension.tutorial.server.resources.SequenceResource;
 import net.explorviz.extension.tutorial.server.resources.StepResource;
+import net.explorviz.extension.tutorial.server.resources.TimestampResource;
 import net.explorviz.extension.tutorial.server.resources.TutorialResource;
 import net.explorviz.shared.exceptions.mapper.GeneralExceptionMapper;
 import net.explorviz.shared.exceptions.mapper.WebApplicationExceptionMapper;
@@ -50,7 +51,7 @@ public class Application extends ResourceConfig {
 		this.register(SequenceResource.class);
 		this.register(StepResource.class);
 		this.register(LandscapeResource.class);
-
+		this.register(TimestampResource.class);
 
 	}
 

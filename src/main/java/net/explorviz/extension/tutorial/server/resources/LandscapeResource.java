@@ -1,6 +1,7 @@
 package net.explorviz.extension.tutorial.server.resources;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -14,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.jetty.http.HttpStatus;
@@ -24,7 +26,10 @@ import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
 import net.explorviz.extension.tutorial.model.TutorialLandscape;
+import net.explorviz.extension.tutorial.model.TutorialTimestamp;
+import net.explorviz.extension.tutorial.services.TutorialCrudException;
 import net.explorviz.extension.tutorial.services.TutorialLandscapeMongoCrudService;
+import net.explorviz.extension.tutorial.services.TutorialTimestampMongoCrudService;
 
 @Path("v1/tutorials/landscapes")
 public class LandscapeResource {
@@ -39,6 +44,9 @@ public class LandscapeResource {
 	@Inject
 	private TutorialLandscapeMongoCrudService tutorialLandscapeCrudService;
 
+	@Inject
+	private TutorialTimestampMongoCrudService timestampLandscapeCrudService;
+	
 	/**
 	 * Retrieves a single tutorialLandscape identified by its id.
 	 *
@@ -46,19 +54,26 @@ public class LandscapeResource {
 	 * @return the {@link TutorialLandscape} object with the given id
 	 */
 	@GET
-	@Path("{id}")
+	@Path("/by-timestamp")
 	@Produces(MEDIA_TYPE)
-	public TutorialLandscape tutorialLandscapeById(@PathParam("id") final String id) {
+	public TutorialLandscape tutorialLandscapeByTimestamp(@QueryParam("timestamp") final String timestamp) throws TutorialCrudException{
 		TutorialLandscape foundTutorialLandscape = null;
+		TutorialTimestamp foundTimestamp = null;
 
 		try {
-			foundTutorialLandscape = this.tutorialLandscapeCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
+			foundTimestamp = this.timestampLandscapeCrudService.findEntityByFieldValue("timestamp", timestamp).get();
+			foundTutorialLandscape = this.tutorialLandscapeCrudService.findEntityByFieldValue("timestamp", foundTimestamp).get();
 		} catch (final MongoException ex) {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("Could not retrieve tutorialLandscape: " + ex.getMessage() + " (" + ex.getCode() + ")");
 			}
 			throw new InternalServerErrorException(ex);
-		}
+		} catch (final NoSuchElementException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not retrieve tutorialLandscape: " + ex.getMessage());
+			}
+			throw new TutorialCrudException("landscape not found");		
+			}
 
 		return foundTutorialLandscape;
 	}
@@ -153,5 +168,23 @@ public class LandscapeResource {
 			throw new InternalServerErrorException(ex);
 		}
 	}
+	
+	@POST	
+	@Path("/import")
+	@Consumes(MEDIA_TYPE)
+	@Produces(MEDIA_TYPE)
+	public TutorialLandscape importTutorialLandscape(final TutorialLandscape tutorialLandscape) { // NOPMD
+		try {
+			return this.tutorialLandscapeCrudService.saveNewEntity(tutorialLandscape).orElseThrow(() -> new InternalServerErrorException());
+		} catch (final DuplicateKeyException ex) {
+			throw new BadRequestException("TutorialLandscape already exists", ex);
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(MSG_TUTORIAL_NOT_RETRIEVED + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+	}
+
 
 }

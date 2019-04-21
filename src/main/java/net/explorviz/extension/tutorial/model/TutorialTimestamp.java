@@ -1,6 +1,5 @@
 package net.explorviz.extension.tutorial.model;
 
-import com.github.jasminb.jsonapi.LongIdHandler;
 import com.github.jasminb.jsonapi.annotations.Type;
 
 import xyz.morphia.annotations.Entity;
@@ -9,17 +8,22 @@ import xyz.morphia.annotations.Id;
 @Entity("tutorialtimestamp")
 @Type("tutorialtimestamp")
 public class TutorialTimestamp {
-	@Id
-	@com.github.jasminb.jsonapi.annotations.Id(LongIdHandler.class)
-	private String id;
 	
 	private String name;
 	
+	@Id
+	@com.github.jasminb.jsonapi.annotations.Id
+	private String id;
 	
 	private String timestamp;
 	
+	private Integer totalRequests;
 	
-	public TutorialTimestamp(String timestamp,String name) {
+	public TutorialTimestamp() {
+		
+	}
+	public TutorialTimestamp(String id,String timestamp,String name) {
+		this.id=id;
 		this.name = name;
 		this.timestamp = timestamp;
 	}
@@ -36,15 +40,18 @@ public class TutorialTimestamp {
 	public void setTimestamp(String timestamp) {
 		this.timestamp = timestamp;
 	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
+	public Integer getTotalRequests() {
+		return totalRequests;
+	}
+	public void setTotalRequests(Integer totalRequests) {
+		this.totalRequests = totalRequests;
+	}
 	
-
 	
 }

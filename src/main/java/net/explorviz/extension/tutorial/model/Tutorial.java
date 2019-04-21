@@ -1,9 +1,9 @@
 package net.explorviz.extension.tutorial.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.jasminb.jsonapi.LongIdHandler;
 import com.github.jasminb.jsonapi.annotations.Relationship;
 import com.github.jasminb.jsonapi.annotations.Type;
 
@@ -16,7 +16,7 @@ import xyz.morphia.annotations.Transient;
 
 @Type("tutorial")
 @Entity("tutorial")
-public class Tutorial {
+public class Tutorial implements Serializable {
 	@Id
 	@com.github.jasminb.jsonapi.annotations.Id
 	private String id;
@@ -39,7 +39,7 @@ public class Tutorial {
 	@Reference
 	@Relationship("sequences")
 	private List<Sequence> sequences = new ArrayList<>();
-	
+
 	public String getLandscapeTimestamp() {
 		return landscapeTimestamp;
 	}

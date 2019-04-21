@@ -65,7 +65,7 @@ public class TutorialLandscapeMongoCrudService implements MongoCrudService<Tutor
    */
   public Optional<TutorialLandscape> saveNewEntity(final TutorialLandscape tutorialLandscape) {
     // Generate an id
-    tutorialLandscape.setId(this.idGenerator.generateId());
+    //tutorialLandscape.setId(this.idGenerator.generateId());
 
     this.datastore.save(tutorialLandscape);
 

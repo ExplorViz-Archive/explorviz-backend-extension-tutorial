@@ -17,6 +17,7 @@ import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.extension.tutorial.model.TutorialLandscape;
 import net.explorviz.extension.tutorial.model.TutorialTimestamp;
 import net.explorviz.extension.tutorial.services.TutorialLandscapeMongoCrudService;
+import net.explorviz.extension.tutorial.services.TutorialTimestampMongoCrudService;
 import xyz.morphia.Datastore;
 
 /**
@@ -45,6 +46,8 @@ public class SetupApplicationListener implements ApplicationEventListener {
 	@Inject
 	private TutorialLandscapeMongoCrudService landscapeMongoService;
 	
+	@Inject
+	private TutorialTimestampMongoCrudService timestampMongoService;
 
 	@Override
 	public void onEvent(final ApplicationEvent event) {
@@ -84,21 +87,21 @@ public class SetupApplicationListener implements ApplicationEventListener {
 		this.datastore.save(step2);
 		
 		final Sequence seq = new Sequence();
-		seq.setId("Sequence-1");
+		seq.setId("sequence-1");
 		seq.setTitle("Sequence1");
 		seq.addStep(step);
 		seq.addStep(step2);
 		this.datastore.save(seq);
 		if(!this.landscapeMongoService.getEntityById("landscape-5-1").isPresent()){
-			String jsonlandscape= "{\"data\":{\"type\":\"landscape\",\"id\":\"landscape-5-1\",\"attributes\":{\"extensionAttributes\":{}},\"relationships\":{\"timestamp\":{\"data\":{\"type\":\"timestamp\",\"id\":\"landscape-5-967\"}},\"systems\":{\"data\":[]},\"events\":{\"data\":[]},\"totalApplicationCommunications\":{\"data\":[]}}},\"included\":[{\"type\":\"timestamp\",\"id\":\"landscape-5-967\",\"attributes\":{\"extensionAttributes\":{},\"timestamp\":1553961723688,\"totalRequests\":0}}]}";
-			TutorialLandscape tutlandscape = new TutorialLandscape();
-			tutlandscape.setTimestamp(new TutorialTimestamp("1553961723688","Empty Landscape"));
-			tutlandscape.setLandscape(jsonlandscape);
-			this.landscapeMongoService.saveNewEntity(tutlandscape);
+//			String jsonlandscape= "{\"data\":{\"type\":\"tutoriallandscape\",\"id\":\"landscape-5-1\",\"attributes\":{\"extensionAttributes\":{}},\"relationships\":{\"timestamp\":{\"data\":{\"type\":\"tutorialtimestamp\",\"id\":\"landscape-5-967\"}},\"systems\":{\"data\":[]},\"events\":{\"data\":[]},\"totalApplicationCommunications\":{\"data\":[]}}},\"included\":[{\"type\":\"tutorialtimestamp\",\"id\":\"landscape-5-967\",\"attributes\":{\"extensionAttributes\":{},\"timestamp\":1553961723688,\"totalRequests\":7}}]}";
+//			TutorialTimestamp tutstamp=new TutorialTimestamp("landscape-5-967","1553961723688","Empty Landscape");
+//			this.timestampMongoService.saveNewEntity(tutstamp);
+//			TutorialLandscape tutlandscape = new TutorialLandscape("landscape-5-1",tutstamp,jsonlandscape);
+//			this.landscapeMongoService.saveNewEntity(tutlandscape);
 		}
-		
+
 		final Tutorial tutorial = new Tutorial();
-		tutorial.setLandscapeTimestamp("1553961723688");
+		tutorial.setLandscapeTimestamp("");
 		tutorial.setId("tutorial-1");
 		tutorial.setTitle("First");
 		tutorial.setText("Testtext");

@@ -66,13 +66,11 @@ public class TutorialTimestampMongoCrudService implements MongoCrudService<Tutor
    */
   public Optional<TutorialTimestamp> saveNewEntity(final TutorialTimestamp tutorialTimestamp) {
     // Generate an id
-    tutorialTimestamp.setId(this.idGenerator.generateId());
-
     this.datastore.save(tutorialTimestamp);
 
-    if (LOGGER.isInfoEnabled()) {
-      LOGGER.info("Inserted new tutorialTimestamp with id " + tutorialTimestamp.getId());
-    }
+//    if (LOGGER.isInfoEnabled()) {
+//      LOGGER.info("Inserted new tutorialTimestamp with id " + tutorialTimestamp.getId());
+//    }
     return Optional.ofNullable(tutorialTimestamp);
   }
 

@@ -59,7 +59,6 @@ public class StepResource {
 			}
 			throw new InternalServerErrorException(ex);
 		}
-
 		return foundStep;
 	}
 
@@ -104,9 +103,7 @@ public class StepResource {
 			}
 			targetStep.setTitle(updatedStep.getTitle());
 		}
-		
-			targetStep.setTargetId(updatedStep.getTargetId());
-			targetStep.setTargetType(updatedStep.getTargetType());
+
 			
 		try {
 			this.stepCrudService.updateEntity(targetStep);
