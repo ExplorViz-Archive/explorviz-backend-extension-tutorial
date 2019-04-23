@@ -20,7 +20,13 @@ public class Step{
 	@Indexed(options = @IndexOptions(unique = true))
 	private String title;
 
+	private String text;
+	
+	private String targetId;
+	
+	private String targetType;
 
+	
 	public String getId() {
 		return id;
 	}
@@ -35,6 +41,30 @@ public class Step{
 
 	public void setTitle(final String title) {
 		this.title = title;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public String getTargetId() {
+		return targetId;
+	}
+
+	public void setTargetId(String targetId) {
+		this.targetId = targetId;
+	}
+
+	public String getTargetType() {
+		return targetType;
+	}
+
+	public void setTargetType(String targetType) {
+		this.targetType = targetType;
 	}
 
 

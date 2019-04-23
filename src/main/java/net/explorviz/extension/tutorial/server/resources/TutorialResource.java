@@ -92,11 +92,11 @@ public class TutorialResource {
 			throw new InternalServerErrorException(ex);
 		}
 		
-		String tutIds="";
+		String tutIds="[";
 		for(Tutorial tut: foundTutorials ) {
 			tutIds+=" "+tut.getId();
 		}
-		LOGGER.info("Delivered: " +tutIds );
+		LOGGER.info("Delivered: " +tutIds + "]" );
 
 		return foundTutorials;
 	}
