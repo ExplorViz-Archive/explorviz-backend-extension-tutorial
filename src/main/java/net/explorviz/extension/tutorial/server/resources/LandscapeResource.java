@@ -62,7 +62,7 @@ public class LandscapeResource {
 
 		try {
 			foundTimestamp = this.timestampLandscapeCrudService.findEntityByFieldValue("timestamp", timestamp).get();
-			foundTutorialLandscape = this.tutorialLandscapeCrudService.findEntityByFieldValue("timestamp", foundTimestamp).get();
+			foundTutorialLandscape = this.tutorialLandscapeCrudService.findEntityByFieldValue("tutorialtimestamp", foundTimestamp).get();
 		} catch (final MongoException ex) {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("Could not retrieve tutorialLandscape: " + ex.getMessage() + " (" + ex.getCode() + ")");
