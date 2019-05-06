@@ -16,7 +16,7 @@ public class TutorialLandscape {
 	private String id;
 	
 	@Reference
-	@Relationship("tutorialtimestamp")
+	@Relationship("timestamp")
 	private TutorialTimestamp tutorialtimestamp;
 	
 	private String landscape;
