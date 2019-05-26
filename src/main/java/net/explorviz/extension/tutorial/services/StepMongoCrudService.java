@@ -9,7 +9,9 @@ import org.jvnet.hk2.annotations.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
+import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import xyz.morphia.Datastore;
 
@@ -80,9 +82,14 @@ public class StepMongoCrudService implements MongoCrudService<Step> {
   @Override
   public Optional<Step> getEntityById(final String id) {
 
-    final Step stepObject = this.datastore.get(Step.class, id);
-
-    return Optional.ofNullable(stepObject);
+    final Step foundStep = this.datastore.get(Step.class, id);
+//    Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter("steps", foundStep).get();
+//    
+//    Tutorial foundTutorial = this.datastore.createQuery(Tutorial.class).filter("sequences", foundSequence).get();
+// 
+//    foundSequence.setTutorial(foundTutorial);
+//    foundStep.setSequence(foundSequence);
+    return Optional.ofNullable(foundStep);
   }
 
   @Override
@@ -99,7 +106,12 @@ public class StepMongoCrudService implements MongoCrudService<Step> {
   public Optional<Step> findEntityByFieldValue(final String field, final Object value) {
 
     final Step foundStep = this.datastore.createQuery(Step.class).filter(field, value).get();
-
+//    Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter("steps", foundStep).get();
+//   
+//    Tutorial foundTutorial = this.datastore.createQuery(Tutorial.class).filter("sequences", foundSequence).get();
+// 
+//    foundSequence.setTutorial(foundTutorial);
+//    foundStep.setSequence(foundSequence);
     return Optional.ofNullable(foundStep);
   }
 

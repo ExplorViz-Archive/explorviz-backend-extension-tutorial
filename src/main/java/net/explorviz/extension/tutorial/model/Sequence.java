@@ -13,6 +13,7 @@ import xyz.morphia.annotations.Id;
 import xyz.morphia.annotations.IndexOptions;
 import xyz.morphia.annotations.Indexed;
 import xyz.morphia.annotations.Reference;
+import xyz.morphia.annotations.Transient;
 
 //import net.explorviz.model.landscape.Landscape;
 @Type("sequence")
@@ -31,7 +32,7 @@ public class Sequence implements Serializable{
 	@Reference
 	@Relationship("steps")
 	private List<Step> steps = new ArrayList<>();
-
+	
 	private String action;
 	// private final Landscape landscape;
 
@@ -73,6 +74,10 @@ public class Sequence implements Serializable{
 
 	public String getText() {
 		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
 	}	
 
 }

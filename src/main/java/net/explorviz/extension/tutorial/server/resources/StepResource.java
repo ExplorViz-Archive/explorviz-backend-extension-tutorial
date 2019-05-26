@@ -59,6 +59,7 @@ public class StepResource {
 			}
 			throw new InternalServerErrorException(ex);
 		}
+		
 		return foundStep;
 	}
 
@@ -102,6 +103,22 @@ public class StepResource {
 				throw new BadRequestException(MSG_INVALID_TITLE);
 			}
 			targetStep.setTitle(updatedStep.getTitle());
+		}
+		
+		if (updatedStep.getText() != null) {
+			targetStep.setText(updatedStep.getText());
+		}
+		
+		if (updatedStep.getTargetType() != null) {
+			targetStep.setTargetType(updatedStep.getTargetType());
+		}
+		
+		if (updatedStep.getTargetId() != null) {
+			targetStep.setTargetId(updatedStep.getTargetId());
+		}
+		
+		if (updatedStep.getActionType() != null) {
+			targetStep.setActionType(updatedStep.getActionType());
 		}
 
 			

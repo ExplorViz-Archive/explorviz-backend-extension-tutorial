@@ -6,12 +6,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.management.Query;
 
 import org.jvnet.hk2.annotations.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.explorviz.extension.tutorial.model.Sequence;
+import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import net.explorviz.shared.security.model.roles.Role;
 import xyz.morphia.Datastore;
@@ -82,9 +84,7 @@ public class SequenceMongoCrudService implements MongoCrudService<Sequence> {
 
   @Override
   public Optional<Sequence> getEntityById(final String id) {
-
     final Sequence sequenceObject = this.datastore.get(Sequence.class, id);
-
     return Optional.ofNullable(sequenceObject);
   }
 

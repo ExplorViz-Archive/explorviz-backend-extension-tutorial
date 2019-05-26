@@ -8,6 +8,7 @@ import xyz.morphia.annotations.Entity;
 import xyz.morphia.annotations.Id;
 import xyz.morphia.annotations.IndexOptions;
 import xyz.morphia.annotations.Indexed;
+import xyz.morphia.annotations.Transient;
 
 @Type("step")
 @Entity("step")
@@ -21,6 +22,8 @@ public class Step{
 	private String title;
 
 	private String text;
+	
+	private String actionType;
 	
 	private String targetId;
 	
@@ -67,6 +70,13 @@ public class Step{
 		this.targetType = targetType;
 	}
 
+	public String getActionType() {
+		return actionType;
+	}
+
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
+	}
 
 
 }

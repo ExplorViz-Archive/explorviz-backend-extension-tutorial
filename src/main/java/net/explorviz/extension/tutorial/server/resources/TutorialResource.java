@@ -160,14 +160,6 @@ public class TutorialResource {
 			targetTutorial.setLandscapeTimestamp(updatedTutorial.getLandscapeTimestamp());
 		}
 		
-		if (updatedTutorial.getTargetId() != null) {
-			targetTutorial.setTargetId(updatedTutorial.getTargetId());
-		}
-		
-		if (updatedTutorial.getTargetType() != null) {
-			targetTutorial.setTargetType(updatedTutorial.getTargetType());
-		}
-
 		if (updatedTutorial.getSequences().size() > 0) {
 			targetTutorial.setSequences(updatedTutorial.getSequences());
 		}
