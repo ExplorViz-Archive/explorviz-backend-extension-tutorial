@@ -101,7 +101,7 @@ public class SetupApplicationListener implements ApplicationEventListener {
 		}
 
 		final Tutorial tutorial = new Tutorial();
-		tutorial.setLandscapeTimestamp("");
+		seq.setLandscapeTimestamp("");
 		tutorial.setId("tutorial-1");
 		tutorial.setTitle("First");
 		tutorial.setText("Testtext");

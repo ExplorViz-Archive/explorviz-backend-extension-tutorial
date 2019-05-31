@@ -33,9 +33,17 @@ public class Sequence implements Serializable{
 	@Relationship("steps")
 	private List<Step> steps = new ArrayList<>();
 	
-	private String action;
-	// private final Landscape landscape;
+	private String landscapeTimestamp;
+	
+	public String getLandscapeTimestamp() {
+		return landscapeTimestamp;
+	}
 
+	public void setLandscapeTimestamp(String landscapeTimestamp) {
+		this.landscapeTimestamp = landscapeTimestamp;
+	}
+		
+	
 	public String getId() {
 		return id;
 	}
@@ -50,14 +58,6 @@ public class Sequence implements Serializable{
 
 	public void setTitle(final String title) {
 		this.title = title;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(final String action) {
-		this.action = action;
 	}
 
 	public List<Step> getSteps() {

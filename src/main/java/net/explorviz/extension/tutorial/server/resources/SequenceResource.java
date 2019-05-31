@@ -33,6 +33,7 @@ public class SequenceResource {
 	private static final String MSG_INVALID_TITLE = "Invalid title";
 	private static final String MSG_TUTORIAL_NOT_RETRIEVED = "Could not retrieve sequence ";
 	private static final String MSG_TUTORIAL_NOT_UPDATED = "Could not update sequence ";
+	private static final String MSG_INVALID_LANDSCAPE = "Invalid Landscape";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SequenceResource.class);
 
@@ -96,6 +97,10 @@ public class SequenceResource {
 
 		if (updatedSequence.getId() != null || updatedSequence.getId() != id) { // NOPMD
 			LOGGER.info("Won't update id");
+		}
+		
+		if (updatedSequence.getLandscapeTimestamp() != null) {
+			targetSequence.setLandscapeTimestamp(updatedSequence.getLandscapeTimestamp());
 		}
 
 		if (updatedSequence.getTitle() != null) {

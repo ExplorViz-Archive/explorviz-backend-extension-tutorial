@@ -42,7 +42,6 @@ public class TutorialResource {
 	private static final String MSG_INVALID_TITLE = "Invalid title";
 	private static final String MSG_TUTORIAL_NOT_RETRIEVED = "Could not retrieve tutorial ";
 	private static final String MSG_TUTORIAL_NOT_UPDATED = "Could not update tutorial ";
-	private static final String MSG_INVALID_LANDSCAPE = "Invalid Landscape";
 
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(TutorialResource.class);
@@ -128,37 +127,7 @@ public class TutorialResource {
 			targetTutorial.setTitle(updatedTutorial.getTitle());
 		}
 		
-		if (updatedTutorial.getLandscapeTimestamp() != null) {
-			if (updatedTutorial.getLandscapeTimestamp().equals("")) {
-				throw new BadRequestException(MSG_INVALID_LANDSCAPE);
-			}
-			
-//			Optional<String> landscape = landscapeMongoService.findEntityByTimestamp(updatedTutorial.getLandscapeTimestamp());
-//			if(!landscape.isPresent()){
-//				Integer port = 8080;
-//				  try {
-//				      port = PropertyHelper.getIntegerProperty("landscape.port");
-//				    } catch (final NumberFormatException e) {
-//				      if (LOGGER.isInfoEnabled()) {
-//				        LOGGER.info(
-//				            "ATTENTION: Using default port "+port+". Check explorviz.properties file.",
-//				            e);
-//				      }				
-//				    }
-//				  
-//				    String url =  PropertyHelper.getStringProperty("landscape.url");
-//	                String host = PropertyHelper.getStringProperty("landscape.host");
-//	                URL oracle = new URL("http://"+host+":"+port+url+updatedTutorial.getLandscapeTimestamp()); // URL to Parse
-//		            URLConnection yc = oracle.openConnection();
-//		            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-//		            
-//		            String inputLine;
-//		            while ((inputLine = in.readLine()) != null) {
-//		            	System.out.println(inputLine);
-//		            }
-//			}
-			targetTutorial.setLandscapeTimestamp(updatedTutorial.getLandscapeTimestamp());
-		}
+		targetTutorial.setLandscapeTimestamp(updatedTutorial.getLandscapeTimestamp());
 		
 		if (updatedTutorial.getSequences().size() > 0) {
 			targetTutorial.setSequences(updatedTutorial.getSequences());

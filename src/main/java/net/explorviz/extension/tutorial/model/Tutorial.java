@@ -26,8 +26,6 @@ public class Tutorial implements Serializable {
 
 	private String text;
 	
-	private String landscapeTimestamp;
-
 	@Transient
 	private String landscape;
 	
@@ -35,11 +33,8 @@ public class Tutorial implements Serializable {
 
 	private String targetType;
 
+	private String landscapeTimestamp;
 	
-	@Reference
-	@Relationship("sequences")
-	private List<Sequence> sequences = new ArrayList<>();
-
 	public String getLandscapeTimestamp() {
 		return landscapeTimestamp;
 	}
@@ -47,7 +42,12 @@ public class Tutorial implements Serializable {
 	public void setLandscapeTimestamp(String landscapeTimestamp) {
 		this.landscapeTimestamp = landscapeTimestamp;
 	}
-		
+
+	@Reference
+	@Relationship("sequences")
+	private List<Sequence> sequences = new ArrayList<>();
+
+
 	public String getId() {
 		return id;
 	}
