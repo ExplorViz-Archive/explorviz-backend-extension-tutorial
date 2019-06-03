@@ -104,7 +104,6 @@ public class SetupApplicationListener implements ApplicationEventListener {
 		seq.setLandscapeTimestamp("");
 		tutorial.setId("tutorial-1");
 		tutorial.setTitle("First");
-		tutorial.setText("Testtext");
 		tutorial.addSequence(seq);
 		LOGGER.info("Created default tutorial: " + tutorial.getTitle());
 		LOGGER.info("ID: " + tutorial.getId());

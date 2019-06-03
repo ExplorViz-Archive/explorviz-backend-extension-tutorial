@@ -23,8 +23,6 @@ public class Tutorial implements Serializable {
 
 	@Indexed(options = @IndexOptions(unique = true))
 	private String title;
-
-	private String text;
 	
 	@Transient
 	private String landscape;
@@ -62,14 +60,6 @@ public class Tutorial implements Serializable {
 
 	public void setTitle(final String title) {
 		this.title = title;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(final String text) {
-		this.text = text;
 	}
 
 	public List<Sequence> getSequences() {

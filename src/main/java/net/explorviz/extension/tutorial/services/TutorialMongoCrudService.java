@@ -65,7 +65,7 @@ public class TutorialMongoCrudService implements MongoCrudService<Tutorial> {
    */
   public Optional<Tutorial> saveNewEntity(final Tutorial tutorial) {
     // Generate an id
-    //tutorial.setId(this.idGenerator.generateId());
+    tutorial.setId(this.idGenerator.generateId());
 
     this.datastore.save(tutorial);
 

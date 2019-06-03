@@ -23,11 +23,13 @@ import net.explorviz.shared.common.idgen.IdGenerator;
 import net.explorviz.shared.common.idgen.ServiceIdGenerator;
 import net.explorviz.shared.common.idgen.UuidServiceIdGenerator;
 import net.explorviz.shared.common.injection.CommonDependencyInjectionBinder;
+import net.explorviz.shared.config.annotations.Config;
 import net.explorviz.shared.config.annotations.ConfigValues;
 import net.explorviz.shared.config.annotations.injection.ConfigInjectionResolver;
 import net.explorviz.shared.config.annotations.injection.ConfigValuesInjectionResolver;
 import net.explorviz.shared.exceptions.ErrorObjectHelper;
 import net.explorviz.shared.exceptions.JsonApiErrorObjectHelper;
+import net.explorviz.shared.security.TokenParserService;
 import xyz.morphia.Datastore;
 
 /**
@@ -38,25 +40,33 @@ public class DependencyInjectionBinder extends CommonDependencyInjectionBinder {
 
 	@Override
 	public void configure() {
-	    // Id Generator
-	    this.bind(UuidServiceIdGenerator.class).to(ServiceIdGenerator.class).in(Singleton.class);
-	    this.bind(AtomicEntityIdGenerator.class).to(EntityIdGenerator.class).in(PerLookup.class);
-	    this.bind(IdGenerator.class).to(IdGenerator.class).in(PerLookup.class);
-		// Injectable config properties
-	    this.bind(JsonApiErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);
+		
+//
+//	    // Injectable config properties
+//	    this.bind(new ConfigInjectionResolver())
+//	        .to(new TypeLiteral<InjectionResolver<ConfigValues>>() {});
+//	    this.bind(new ConfigValuesInjectionResolver())
+//	        .to(new TypeLiteral<InjectionResolver<ConfigValues>>() {});
+//
 
-	    
-
-	    this.bindFactory(ResourceConverterFactory.class).to(ResourceConverter.class).in(Singleton.class);
-
-		this.bind(new ConfigInjectionResolver()).to(new TypeLiteral<InjectionResolver<ConfigValues>>() {
-		});
-		this.bind(new ConfigValuesInjectionResolver()).to(new TypeLiteral<InjectionResolver<ConfigValues>>() {
-		});
-	    this.bind(IdGenerator.class).to(IdGenerator.class).in(Singleton.class);
-
-		this.bindFactory(ResourceConverterFactory.class).to(ResourceConverter.class).in(Singleton.class);
-
+//
+//	    this.bind(TokenParserService.class).to(TokenParserService.class).in(Singleton.class);
+//
+//	    // injectable config properties
+//	    this.bind(new ConfigInjectionResolver()).to(new TypeLiteral<InjectionResolver<Config>>() {});
+//
+//	    // ErrorObject Handler
+//	    this.bind(JsonApiErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);
+//
+//	    // Id Generator
+//	    this.bind(UuidServiceIdGenerator.class).to(ServiceIdGenerator.class).in(Singleton.class);
+//	    this.bind(AtomicEntityIdGenerator.class).to(EntityIdGenerator.class).in(PerLookup.class);
+//	    this.bind(IdGenerator.class).to(IdGenerator.class).in(PerLookup.class);
+		super.configure();
+		
+		 this.bindFactory(ResourceConverterFactory.class).to(ResourceConverter.class)
+	        .in(Singleton.class);
+		 
 		this.bind(MongoConnection.class).to(MongoConnection.class).in(Singleton.class);
 
 		this.bindFactory(DatastoreFactory.class).to(Datastore.class).in(Singleton.class);
@@ -67,7 +77,5 @@ public class DependencyInjectionBinder extends CommonDependencyInjectionBinder {
 		this.bind(TutorialLandscapeMongoCrudService.class).to(TutorialLandscapeMongoCrudService.class).in(Singleton.class);
 		this.bind(TutorialTimestampMongoCrudService.class).to(TutorialTimestampMongoCrudService.class).in(Singleton.class);
 
-		// ErrorObject Handler
-		this.bind(ErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);
 	}
 }
