@@ -24,7 +24,6 @@ public class Sequence implements Serializable{
 	@com.github.jasminb.jsonapi.annotations.Id
 	private String id;
 
-	@Indexed(options = @IndexOptions(unique = true))
 	private String title;
 
 	private String text;

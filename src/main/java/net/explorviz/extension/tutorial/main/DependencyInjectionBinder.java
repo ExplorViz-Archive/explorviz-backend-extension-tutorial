@@ -42,27 +42,27 @@ public class DependencyInjectionBinder extends CommonDependencyInjectionBinder {
 	public void configure() {
 		
 //
-//	    // Injectable config properties
-//	    this.bind(new ConfigInjectionResolver())
-//	        .to(new TypeLiteral<InjectionResolver<ConfigValues>>() {});
-//	    this.bind(new ConfigValuesInjectionResolver())
-//	        .to(new TypeLiteral<InjectionResolver<ConfigValues>>() {});
+	    // Injectable config properties
+	    this.bind(new ConfigInjectionResolver())
+	        .to(new TypeLiteral<InjectionResolver<ConfigValues>>() {});
+	    this.bind(new ConfigValuesInjectionResolver())
+	        .to(new TypeLiteral<InjectionResolver<ConfigValues>>() {});
 //
 
-//
-//	    this.bind(TokenParserService.class).to(TokenParserService.class).in(Singleton.class);
-//
-//	    // injectable config properties
-//	    this.bind(new ConfigInjectionResolver()).to(new TypeLiteral<InjectionResolver<Config>>() {});
-//
-//	    // ErrorObject Handler
-//	    this.bind(JsonApiErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);
-//
-//	    // Id Generator
-//	    this.bind(UuidServiceIdGenerator.class).to(ServiceIdGenerator.class).in(Singleton.class);
-//	    this.bind(AtomicEntityIdGenerator.class).to(EntityIdGenerator.class).in(PerLookup.class);
-//	    this.bind(IdGenerator.class).to(IdGenerator.class).in(PerLookup.class);
-		super.configure();
+
+	    this.bind(TokenParserService.class).to(TokenParserService.class).in(Singleton.class);
+
+	    // injectable config properties
+	    this.bind(new ConfigInjectionResolver()).to(new TypeLiteral<InjectionResolver<Config>>() {});
+
+	    // ErrorObject Handler
+	    this.bind(JsonApiErrorObjectHelper.class).to(ErrorObjectHelper.class).in(Singleton.class);
+
+	    // Id Generator
+	    this.bind(UuidServiceIdGenerator.class).to(ServiceIdGenerator.class).in(Singleton.class);
+	    this.bind(AtomicEntityIdGenerator.class).to(EntityIdGenerator.class).in(PerLookup.class);
+	    this.bind(IdGenerator.class).to(IdGenerator.class).in(PerLookup.class);
+		//super.configure();
 		
 		 this.bindFactory(ResourceConverterFactory.class).to(ResourceConverter.class)
 	        .in(Singleton.class);

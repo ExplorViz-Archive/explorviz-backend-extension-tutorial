@@ -29,7 +29,18 @@ services:
        - explorviz-landscape-mongo-data:/data/db
        - explorviz-landscape-mongo-configdb:/data/configdb
     network_mode: "host"
-    
+
+  mongo-settings:
+     image: mongo
+     container_name: explorviz-settings-mongo
+     command: mongod --port 27019
+     ports:
+     - 27019:27019
+     volumes:
+     - explorviz-settings-mongo-data:/data/db
+     - explorviz-settings-mongo-configdb:/data/configdb
+     network_mode: "host"
+
    ids-redis:
       image: redis
       container_name: explorviz-ids-redis
@@ -61,9 +72,9 @@ services:
    mongo-tutorial:
     image: mongo
     container_name: explorviz-tutorial-mongo
-    command: mongod --port 27019
+    command: mongod --port 27090
     ports:
-       - 27019:27019
+       - 27090:27090
     volumes:
        - explorviz-tutorial-mongo-data:/data/db
        - explorviz-tutorial-mongo-configdb:/data/configdb
@@ -76,4 +87,6 @@ volumes:
   explorviz-landscape-mongo-configdb:
   explorviz-ids-redis:
   explorviz-tutorial-mongo-data:
-  explorviz-tutorial-mongo-configdb: 
+  explorviz-tutorial-mongo-configdb:
+  explorviz-settings-mongo-data:
+  explorviz-settings-mongo-configdb:

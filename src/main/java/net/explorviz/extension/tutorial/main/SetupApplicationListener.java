@@ -77,38 +77,38 @@ public class SetupApplicationListener implements ApplicationEventListener {
 	private void createDefaultData() throws CannotPerformOperationException {
 
 
-		final Step step = new Step();
-		step.setId("step-1");
-		step.setTitle("Step1");
-		this.datastore.save(step);
-		final Step step2 = new Step();
-		step2.setId("step-2");
-		step2.setTitle("Step2");
-		this.datastore.save(step2);
-		
-		final Sequence seq = new Sequence();
-		seq.setId("sequence-1");
-		seq.setTitle("Sequence1");
-		seq.addStep(step);
-		seq.addStep(step2);
-		this.datastore.save(seq);
-		if(!this.landscapeMongoService.getEntityById("landscape-5-1").isPresent()){
-//			String jsonlandscape= "{\"data\":{\"type\":\"tutoriallandscape\",\"id\":\"landscape-5-1\",\"attributes\":{\"extensionAttributes\":{}},\"relationships\":{\"timestamp\":{\"data\":{\"type\":\"tutorialtimestamp\",\"id\":\"landscape-5-967\"}},\"systems\":{\"data\":[]},\"events\":{\"data\":[]},\"totalApplicationCommunications\":{\"data\":[]}}},\"included\":[{\"type\":\"tutorialtimestamp\",\"id\":\"landscape-5-967\",\"attributes\":{\"extensionAttributes\":{},\"timestamp\":1553961723688,\"totalRequests\":7}}]}";
-//			TutorialTimestamp tutstamp=new TutorialTimestamp("landscape-5-967","1553961723688","Empty Landscape");
-//			this.timestampMongoService.saveNewEntity(tutstamp);
-//			TutorialLandscape tutlandscape = new TutorialLandscape("landscape-5-1",tutstamp,jsonlandscape);
-//			this.landscapeMongoService.saveNewEntity(tutlandscape);
-		}
-
-		final Tutorial tutorial = new Tutorial();
-		seq.setLandscapeTimestamp("");
-		tutorial.setId("tutorial-1");
-		tutorial.setTitle("First");
-		tutorial.addSequence(seq);
-		LOGGER.info("Created default tutorial: " + tutorial.getTitle());
-		LOGGER.info("ID: " + tutorial.getId());
-
-		this.datastore.save(tutorial);
+//		final Step step = new Step();
+//		step.setId("step-1");
+//		step.setTitle("Step1");
+//		this.datastore.save(step);
+//		final Step step2 = new Step();
+//		step2.setId("step-2");
+//		step2.setTitle("Step2");
+//		this.datastore.save(step2);
+//		
+//		final Sequence seq = new Sequence();
+//		seq.setId("sequence-1");
+//		seq.setTitle("Sequence1");
+//		seq.addStep(step);
+//		seq.addStep(step2);
+//		this.datastore.save(seq);
+//		if(!this.landscapeMongoService.getEntityById("landscape-5-1").isPresent()){
+////			String jsonlandscape= "{\"data\":{\"type\":\"tutoriallandscape\",\"id\":\"landscape-5-1\",\"attributes\":{\"extensionAttributes\":{}},\"relationships\":{\"timestamp\":{\"data\":{\"type\":\"tutorialtimestamp\",\"id\":\"landscape-5-967\"}},\"systems\":{\"data\":[]},\"events\":{\"data\":[]},\"totalApplicationCommunications\":{\"data\":[]}}},\"included\":[{\"type\":\"tutorialtimestamp\",\"id\":\"landscape-5-967\",\"attributes\":{\"extensionAttributes\":{},\"timestamp\":1553961723688,\"totalRequests\":7}}]}";
+////			TutorialTimestamp tutstamp=new TutorialTimestamp("landscape-5-967","1553961723688","Empty Landscape");
+////			this.timestampMongoService.saveNewEntity(tutstamp);
+////			TutorialLandscape tutlandscape = new TutorialLandscape("landscape-5-1",tutstamp,jsonlandscape);
+////			this.landscapeMongoService.saveNewEntity(tutlandscape);
+//		}
+//
+//		final Tutorial tutorial = new Tutorial();
+//		seq.setLandscapeTimestamp("");
+//		tutorial.setId("tutorial-1");
+//		tutorial.setTitle("First");
+//		tutorial.addSequence(seq);
+//		LOGGER.info("Created default tutorial: " + tutorial.getTitle());
+//		LOGGER.info("ID: " + tutorial.getId());
+//
+//		this.datastore.save(tutorial);
 
 	}
 }

@@ -79,6 +79,7 @@ public class LandscapeResource {
 	}
 
 	@GET
+	@Path("/all")
 	@Produces(MEDIA_TYPE)
 	public List<TutorialLandscape> tutorialLandscapesAll() {
 		List<TutorialLandscape> foundTutorialLandscapes = null;
