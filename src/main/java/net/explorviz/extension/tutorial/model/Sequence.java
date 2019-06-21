@@ -70,7 +70,15 @@ public class Sequence implements Serializable{
 	public void addStep(final Step step) {
 		this.steps.add(step);
 	}
+	public void removeStep(Step step) {
+		for(Step s: steps) {
+			if(s.getId().equals(step.getId())){
+				step=s;
+			}
+		}
+		this.steps.remove(step);
 
+	}
 	public String getText() {
 		return text;
 	}

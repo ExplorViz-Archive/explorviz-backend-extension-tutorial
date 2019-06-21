@@ -6,17 +6,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.management.Query;
 
 import org.jvnet.hk2.annotations.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.explorviz.extension.tutorial.model.Sequence;
+import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import net.explorviz.shared.security.model.roles.Role;
 import xyz.morphia.Datastore;
+import xyz.morphia.Key;
+import xyz.morphia.query.Query;
 
 /**
  * Offers CRUD operations on sequence objects, backed by a MongoDB instance as persistence layer. Each
@@ -90,8 +92,11 @@ public class SequenceMongoCrudService implements MongoCrudService<Sequence> {
 
   @Override
   public void deleteEntityById(final String id){
+	Sequence seq =  this.datastore.get(Sequence.class,id);
+	Tutorial parent = this.datastore.find(Tutorial.class).field("sequences").hasThisOne(seq).get();
+    parent.removeSequence(seq);
+    this.datastore.save(parent);
     this.datastore.delete(Sequence.class, id);
-
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info("Deleted sequence with id " + id);
     }

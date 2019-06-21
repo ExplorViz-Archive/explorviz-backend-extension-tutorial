@@ -24,7 +24,10 @@ import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
 import net.explorviz.extension.tutorial.model.Sequence;
+import net.explorviz.extension.tutorial.model.Step;
+import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.extension.tutorial.services.SequenceMongoCrudService;
+import net.explorviz.extension.tutorial.services.StepMongoCrudService;
 
 @Path("v1/tutorials/sequences")
 public class SequenceResource {
@@ -39,6 +42,9 @@ public class SequenceResource {
 
 	@Inject
 	private SequenceMongoCrudService sequenceCrudService;
+	
+	@Inject
+	private StepMongoCrudService stepMongoService;
 
 	/**
 	 * Retrieves a single sequence identified by its id.
@@ -62,6 +68,26 @@ public class SequenceResource {
 		}
 
 		return foundSequence;
+	}
+	
+	@DELETE
+	@Path("{id}")
+	@Consumes(MEDIA_TYPE)
+	public void deletesequenceById(@PathParam("id") final String id) {
+		try {
+		
+			Sequence foundSequence = this.sequenceCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
+			for(Step sq : foundSequence.getSteps()) {
+					this.stepMongoService.deleteEntityById(sq.getId());
+			}			
+		   this.sequenceCrudService.deleteEntityById(id);
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not retrieve sequence: " + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+
 	}
 
 	@GET

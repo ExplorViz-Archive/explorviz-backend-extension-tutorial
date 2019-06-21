@@ -14,6 +14,7 @@ import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
 import net.explorviz.shared.common.idgen.IdGenerator;
 import xyz.morphia.Datastore;
+import xyz.morphia.query.Query;
 
 /**
  * Offers CRUD operations on step objects, backed by a MongoDB instance as persistence layer. Each
@@ -94,8 +95,11 @@ public class StepMongoCrudService implements MongoCrudService<Step> {
 
   @Override
   public void deleteEntityById(final String id){
-    this.datastore.delete(Step.class, id);
-
+	    Step step =  this.datastore.get(Step.class,id);
+	    Sequence parent = this.datastore.find(Sequence.class).field("steps").hasThisOne(step).get();
+	    parent.removeStep(step);
+	    this.datastore.save(parent);
+        this.datastore.delete(Step.class, id);
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info("Deleted step with id " + id);
     }

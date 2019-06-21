@@ -62,6 +62,21 @@ public class StepResource {
 		
 		return foundStep;
 	}
+	
+	@DELETE
+	@Path("{id}")
+	@Consumes(MEDIA_TYPE)
+	public void deletestepById(@PathParam("id") final String id) {
+		try {
+		   this.stepCrudService.deleteEntityById(id);
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not retrieve step: " + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+
+	}
 
 	@GET
 	@Produces(MEDIA_TYPE)

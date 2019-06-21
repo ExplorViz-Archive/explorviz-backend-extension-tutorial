@@ -1,9 +1,7 @@
 package net.explorviz.extension.tutorial.services;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -13,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import net.explorviz.extension.tutorial.model.TutorialLandscape;
 import net.explorviz.shared.common.idgen.IdGenerator;
-import net.explorviz.shared.security.model.roles.Role;
 import xyz.morphia.Datastore;
 
 /**

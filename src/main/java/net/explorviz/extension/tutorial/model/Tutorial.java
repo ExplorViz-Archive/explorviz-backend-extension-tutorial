@@ -12,7 +12,6 @@ import xyz.morphia.annotations.Id;
 import xyz.morphia.annotations.IndexOptions;
 import xyz.morphia.annotations.Indexed;
 import xyz.morphia.annotations.Reference;
-import xyz.morphia.annotations.Transient;
 
 @Type("tutorial")
 @Entity("tutorial")
@@ -23,9 +22,6 @@ public class Tutorial implements Serializable {
 
 	@Indexed(options = @IndexOptions(unique = true))
 	private String title;
-	
-	@Transient
-	private String landscape;
 	
 	private String targetId;
 
@@ -73,6 +69,14 @@ public class Tutorial implements Serializable {
 	public void addSequence(final Sequence sequence) {
 		this.sequences.add(sequence);
 	}
+	public void removeSequence(Sequence sequence) {
+		for(Sequence s: sequences) {
+			if(s.getId().equals(sequence.getId())){
+				sequence=s;
+			}
+		}
+		this.sequences.remove(sequence);
+	}
 
 	public String getTargetId() {
 		return targetId;
@@ -89,15 +93,6 @@ public class Tutorial implements Serializable {
 	public void setTargetType(String targetType) {
 		this.targetType = targetType;
 	}
-
-	public String getLandscape() {
-		return landscape;
-	}
-
-	public void setLandscape(String landscape) {
-		this.landscape = landscape;
-	}
-
 
 
 }

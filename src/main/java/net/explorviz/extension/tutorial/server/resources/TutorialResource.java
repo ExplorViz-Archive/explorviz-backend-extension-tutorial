@@ -30,7 +30,12 @@ import org.slf4j.LoggerFactory;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
 
+import net.explorviz.extension.tutorial.model.Sequence;
+import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
+import net.explorviz.extension.tutorial.model.TutorialTimestamp;
+import net.explorviz.extension.tutorial.services.SequenceMongoCrudService;
+import net.explorviz.extension.tutorial.services.StepMongoCrudService;
 import net.explorviz.extension.tutorial.services.TutorialLandscapeMongoCrudService;
 import net.explorviz.extension.tutorial.services.TutorialMongoCrudService;
 import net.explorviz.shared.config.helper.PropertyHelper;
@@ -52,6 +57,11 @@ public class TutorialResource {
 	@Inject
 	private TutorialLandscapeMongoCrudService landscapeMongoService;
 
+	@Inject
+	private SequenceMongoCrudService sequenceMongoService;
+
+	@Inject
+	private StepMongoCrudService stepMongoService;
 	/**
 	 * Retrieves a single tutorial identified by its id.
 	 *
@@ -75,6 +85,29 @@ public class TutorialResource {
 		;
 		LOGGER.info("Delivered: " +foundTutorial.getId() );
 		return foundTutorial;
+	}
+	
+	
+	@DELETE
+	@Path("{id}")
+	@Consumes(MEDIA_TYPE)
+	public void removetutorialById(@PathParam("id") final String id) {
+		try {
+			Tutorial foundTutorial = this.tutorialCrudService.getEntityById(id).orElseThrow(() -> new NotFoundException());
+			for(Sequence sq : foundTutorial.getSequences()) {
+				for(Step st: sq.getSteps()) {
+					this.stepMongoService.deleteEntityById(st.getId());
+				}
+				this.sequenceMongoService.deleteEntityById(sq.getId());
+			}
+			this.tutorialCrudService.deleteEntityById(id);
+		} catch (final MongoException ex) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Could not delete tutorial: " + ex.getMessage() + " (" + ex.getCode() + ")");
+			}
+			throw new InternalServerErrorException(ex);
+		}
+		;
 	}
 
 	@GET
