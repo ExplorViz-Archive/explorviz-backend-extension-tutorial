@@ -20,15 +20,14 @@ public class Tutorial implements Serializable {
 	@com.github.jasminb.jsonapi.annotations.Id
 	private String id;
 
-	@Indexed(options = @IndexOptions(unique = true))
 	private String title;
-	
-	private String targetId;
-
-	private String targetType;
 
 	private String landscapeTimestamp;
-	
+
+	@Reference
+	@Relationship("sequences")
+	private List<Sequence> sequences = new ArrayList<>();
+
 	public String getLandscapeTimestamp() {
 		return landscapeTimestamp;
 	}
@@ -36,11 +35,6 @@ public class Tutorial implements Serializable {
 	public void setLandscapeTimestamp(String landscapeTimestamp) {
 		this.landscapeTimestamp = landscapeTimestamp;
 	}
-
-	@Reference
-	@Relationship("sequences")
-	private List<Sequence> sequences = new ArrayList<>();
-
 
 	public String getId() {
 		return id;
@@ -77,22 +71,5 @@ public class Tutorial implements Serializable {
 		}
 		this.sequences.remove(sequence);
 	}
-
-	public String getTargetId() {
-		return targetId;
-	}
-
-	public void setTargetId(String targetId) {
-		this.targetId = targetId;
-	}
-
-	public String getTargetType() {
-		return targetType;
-	}
-
-	public void setTargetType(String targetType) {
-		this.targetType = targetType;
-	}
-
 
 }
