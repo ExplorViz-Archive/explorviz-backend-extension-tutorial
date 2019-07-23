@@ -17,7 +17,7 @@ import net.explorviz.shared.config.helper.PropertyHelper;
 public final class Main {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
-	private static final int DEFAULT_PORT = 8082;
+	private static final int DEFAULT_PORT = 8084;
 
 	private Main() {
 		// utility class
