@@ -1,0 +1,16 @@
+version: "3.2"
+services:
+
+   mongo-tutorial:
+    image: mongo
+    container_name: explorviz-tutorial-mongo
+    command: mongod --port 27090
+    ports:
+       - 27090:27090
+    volumes:
+       - explorviz-tutorial-mongo-data:/data/db
+       - explorviz-tutorial-mongo-configdb:/data/configdb
+
+volumes:
+  explorviz-tutorial-mongo-data:
+  explorviz-tutorial-mongo-configdb:
