@@ -9,6 +9,7 @@ This extension adds features to the backend of ExplorViz to enable communication
 ## Installation
 1. Follow the [Eclipse Setup](https://github.com/ExplorViz/explorviz-backend#eclipse-setup) of the [ExplorViz Backend](https://github.com/ExplorViz/explorviz-backend)
 2. Clone this repository
-3. Import project into eclipse: via `Import -> Gradle -> Existing Gradle project -> path/to/explorviz-backend-extension-tutorial`
-4. Start **explorviz-backend-extension-tutorial** via Eclipse Tab: Run `src/main/java/net/explorviz/extension/tutorial/main/Main.java` as java-application.
-5. Setup and start [explorviz-frontend](https://github.com/ExplorViz/explorviz-frontend) with the installed [explorviz-frontend-extension-tutorial](https://github.com/ExplorViz/explorviz-frontend-extension-tutorial)
+3. Follow the instructions inside of the docker-compose folder to start mandatory docker-based services (e.g. MongoDB)
+4. Import project into eclipse: via `Import -> Gradle -> Existing Gradle project -> path/to/explorviz-backend-extension-tutorial`
+5. Start **explorviz-backend-extension-tutorial** via Eclipse Tab: Run `src/main/java/net/explorviz/extension/tutorial/main/Main.java` as java-application.
+6. Setup and start [explorviz-frontend](https://github.com/ExplorViz/explorviz-frontend) with the installed [explorviz-frontend-extension-tutorial](https://github.com/ExplorViz/explorviz-frontend-extension-tutorial)
