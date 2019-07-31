@@ -19,6 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.bson.Document;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -29,6 +30,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DefaultDBDecoder;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
 
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
@@ -241,7 +243,8 @@ public class TutorialResource {
 	}
 	
 	 private void decodeStreamToMongoDB(final InputStream uploadedInputStream) {	    
-		     DefaultDBDecoder dbEncoder = new DefaultDBDecoder();
+//		     DefaultDBDecoder dbEncoder = new DefaultDBDecoder();
+//		     final MongoCollection<Document> landscapeCollection = mongoHelper.getLandscapeCollection();
 //		     dbEncoder.decode(uploadedInputStream, collection);
 	 }
 
