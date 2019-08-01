@@ -2,13 +2,10 @@ package net.explorviz.extension.tutorial.services;
 
 import java.util.List;
 import java.util.Optional;
-
 import javax.inject.Inject;
-
 import org.jvnet.hk2.annotations.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
@@ -35,7 +32,6 @@ public class StepMongoCrudService implements MongoCrudService<Step> {
 
 
   private final Datastore datastore;
-
 
   @Inject
   private IdGenerator idGenerator;
@@ -84,39 +80,53 @@ public class StepMongoCrudService implements MongoCrudService<Step> {
   public Optional<Step> getEntityById(final String id) {
 
     final Step foundStep = this.datastore.get(Step.class, id);
-//    Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter("steps", foundStep).get();
-//    
-//    Tutorial foundTutorial = this.datastore.createQuery(Tutorial.class).filter("sequences", foundSequence).get();
-// 
-//    foundSequence.setTutorial(foundTutorial);
-//    foundStep.setSequence(foundSequence);
+    // Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter("steps",
+    // foundStep).get();
+    //
+    // Tutorial foundTutorial = this.datastore.createQuery(Tutorial.class).filter("sequences",
+    // foundSequence).get();
+    //
+    // foundSequence.setTutorial(foundTutorial);
+    // foundStep.setSequence(foundSequence);
     return Optional.ofNullable(foundStep);
   }
 
   @Override
-  public void deleteEntityById(final String id){
-	    Step step =  this.datastore.get(Step.class,id);
-	    Sequence parent = this.datastore.find(Sequence.class).field("steps").hasThisOne(step).get();
-	    parent.removeStep(step);
-	    this.datastore.save(parent);
-        this.datastore.delete(Step.class, id);
+  public void deleteEntityById(final String id) {
+    Step step = this.datastore.get(Step.class, id);
+    Sequence parent = this.datastore.find(Sequence.class).field("steps").hasThisOne(step).get();
+    parent.removeStep(step);
+    this.datastore.save(parent);
+    this.datastore.delete(Step.class, id);
     if (LOGGER.isInfoEnabled()) {
       LOGGER.info("Deleted step with id " + id);
     }
   }
 
-  
+
   @Override
   public Optional<Step> findEntityByFieldValue(final String field, final Object value) {
 
     final Step foundStep = this.datastore.createQuery(Step.class).filter(field, value).get();
-//    Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter("steps", foundStep).get();
-//   
-//    Tutorial foundTutorial = this.datastore.createQuery(Tutorial.class).filter("sequences", foundSequence).get();
-// 
-//    foundSequence.setTutorial(foundTutorial);
-//    foundStep.setSequence(foundSequence);
+    // Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter("steps",
+    // foundStep).get();
+    //
+    // Tutorial foundTutorial = this.datastore.createQuery(Tutorial.class).filter("sequences",
+    // foundSequence).get();
+    //
+    // foundSequence.setTutorial(foundTutorial);
+    // foundStep.setSequence(foundSequence);
     return Optional.ofNullable(foundStep);
+  }
+
+  @Override
+  public Optional<Step> saveUploadedEntity(Step step) {
+    this.datastore.save(step);
+
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("Inserted uploaded step with id " + step.getId());
+    }
+    return Optional.ofNullable(step);
   }
 
 

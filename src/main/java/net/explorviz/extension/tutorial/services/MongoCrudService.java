@@ -22,6 +22,13 @@ public interface MongoCrudService<T> {
    */
   Optional<T> saveNewEntity(final T entity);
 
+  /**
+   * Persists a new uploaded entity object.
+   *
+   * @param entity - the entity to persist
+   * @return optional - found entity
+   */
+  Optional<T> saveUploadedEntity(final T entity);
 
   /**
    * Updates values of an existing entity.

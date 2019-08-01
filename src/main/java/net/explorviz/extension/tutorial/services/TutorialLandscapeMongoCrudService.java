@@ -103,6 +103,12 @@ public class TutorialLandscapeMongoCrudService implements MongoCrudService<Tutor
     return Optional.ofNullable(foundTutorialLandscape);
   }
 
+  @Override
+  public Optional<TutorialLandscape> saveUploadedEntity(TutorialLandscape entity) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 
 
 }
