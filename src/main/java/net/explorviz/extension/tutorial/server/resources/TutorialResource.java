@@ -8,7 +8,6 @@ import com.mongodb.MongoException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
@@ -101,7 +100,7 @@ public class TutorialResource {
         LOGGER.error("Could not delete tutorial: " + ex.getMessage() + " (" + ex.getCode() + ")");
       }
       throw new InternalServerErrorException(ex);
-    } ;
+    }
   }
 
   @GET
@@ -255,39 +254,17 @@ public class TutorialResource {
   @POST
   @Path("/upload")
   @Consumes("multipart/form-data")
-  public Response uploadTutorial(@FormDataParam("file") final InputStream uploadedInputStream,
+  @Produces(MEDIA_TYPE)
+  public Tutorial uploadTutorial(@FormDataParam("file") final InputStream uploadedInputStream,
       @FormDataParam("file") final FormDataContentDisposition fileInfo) {
     LOGGER.info("Trying to upload a tutorial with filename " + fileInfo.getFileName() + "!");
 
     ObjectMapper objectMapper = new ObjectMapper();
-    Tutorial uploadedTutorial;
+    Tutorial uploadedTutorial = null;
 
+    // map uploaded tutorial to tutorial object
     try {
-      // map uploaded tutorial to tutorial object
       uploadedTutorial = objectMapper.readValue(uploadedInputStream, Tutorial.class);
-
-      // check if tutorial already exists
-      boolean tutorialAlreadyExisting =
-          this.tutorialCrudService.getEntityById(uploadedTutorial.getId()).isPresent() ? true
-              : false;
-
-      if (!tutorialAlreadyExisting) {
-        // saving a tutorial does not automatically save sequences and steps in database
-        this.tutorialCrudService.saveUploadedEntity(uploadedTutorial)
-            .orElseThrow(() -> new InternalServerErrorException());
-        for (Sequence seq : uploadedTutorial.getSequences()) {
-          this.sequenceMongoService.saveUploadedEntity(seq)
-              .orElseThrow(() -> new InternalServerErrorException());;
-          for (Step s : seq.getSteps()) {
-            this.stepMongoService.saveUploadedEntity(s)
-                .orElseThrow(() -> new InternalServerErrorException());;
-          }
-        }
-        return Response.status(HttpStatus.OK_200).build();
-      } else {
-        LOGGER.info("Uploaded tutorial already exists!");
-        throw new BadRequestException("Uploaded Tutorial already exists!");
-      }
     } catch (JsonParseException e) {
       LOGGER.error("Cannot parse uploaded tutorial!");
       throw new BadRequestException("Cannot parse uploaded tutorial!");
@@ -298,8 +275,29 @@ public class TutorialResource {
       LOGGER.error("io execption while uploaded landscape!");
       throw new BadRequestException("io execption while uploaded landscape");
     }
+
+    // check if tutorial already exists
+    boolean tutorialAlreadyExisting =
+        this.tutorialCrudService.getEntityById(uploadedTutorial.getId()).isPresent() ? true : false;
+
+    if (!tutorialAlreadyExisting) {
+      LOGGER.info("Creating new tutorial based on uploaded tutorial!");
+      // saving a tutorial does not automatically save sequences and steps in database
+      this.tutorialCrudService.saveUploadedEntity(uploadedTutorial)
+          .orElseThrow(() -> new InternalServerErrorException());
+      for (Sequence seq : uploadedTutorial.getSequences()) {
+        this.sequenceMongoService.saveUploadedEntity(seq)
+            .orElseThrow(() -> new InternalServerErrorException());;
+        for (Step s : seq.getSteps()) {
+          this.stepMongoService.saveUploadedEntity(s)
+              .orElseThrow(() -> new InternalServerErrorException());;
+        }
+      }
+      return uploadedTutorial;
+    } else {
+      LOGGER.info("Uploaded tutorial already exists!");
+      throw new BadRequestException("Uploaded Tutorial already exists!");
+    }
   }
-
-
 
 }
