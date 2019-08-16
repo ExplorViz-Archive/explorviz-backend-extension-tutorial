@@ -44,6 +44,9 @@ dependencies {
   	// ExplorViz security filters
   	//implementation 'com.github.explorviz.explorviz-backend-shared:security:master-SNAPSHOT'
 	
+	// multipart/form-data type
+  	implementation group: 'org.glassfish.jersey.media', name:'jersey-media-multipart', version:'2.26'
+	
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }

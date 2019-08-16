@@ -106,6 +106,17 @@ public class TutorialMongoCrudService implements MongoCrudService<Tutorial> {
     return Optional.ofNullable(foundTutorial);
   }
 
+  @Override
+  public Optional<Tutorial> saveUploadedEntity(Tutorial tutorial) {
+
+    this.datastore.save(tutorial);
+
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("Inserted uploaded tutorial with id " + tutorial.getId());
+    }
+    return Optional.ofNullable(tutorial);
+  }
+
 
 
 }

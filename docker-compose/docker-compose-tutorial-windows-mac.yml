@@ -1,7 +1,7 @@
 version: "3.2"
 services:
 
-   mongo-tutorial:
+  mongo-tutorial:
     image: mongo
     container_name: explorviz-tutorial-mongo
     command: mongod --port 27090

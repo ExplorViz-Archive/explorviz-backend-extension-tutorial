@@ -102,6 +102,12 @@ public class TutorialTimestampMongoCrudService implements MongoCrudService<Tutor
     return Optional.ofNullable(foundTutorialTimestamp);
   }
 
+  @Override
+  public Optional<TutorialTimestamp> saveUploadedEntity(TutorialTimestamp entity) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 
 
 }

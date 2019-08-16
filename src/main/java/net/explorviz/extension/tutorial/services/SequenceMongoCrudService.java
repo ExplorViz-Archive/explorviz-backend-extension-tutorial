@@ -4,13 +4,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import javax.inject.Inject;
-
 import org.jvnet.hk2.annotations.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import net.explorviz.extension.tutorial.model.Sequence;
 import net.explorviz.extension.tutorial.model.Step;
 import net.explorviz.extension.tutorial.model.Tutorial;
@@ -21,8 +18,8 @@ import xyz.morphia.Key;
 import xyz.morphia.query.Query;
 
 /**
- * Offers CRUD operations on sequence objects, backed by a MongoDB instance as persistence layer. Each
- * sequence has the following fields:
+ * Offers CRUD operations on sequence objects, backed by a MongoDB instance as persistence layer.
+ * Each sequence has the following fields:
  * <ul>
  * <li>id: the unique id of the sequence</li>
  * <li>sequencename: name of the sequence, unique</li>
@@ -91,9 +88,9 @@ public class SequenceMongoCrudService implements MongoCrudService<Sequence> {
   }
 
   @Override
-  public void deleteEntityById(final String id){
-	Sequence seq =  this.datastore.get(Sequence.class,id);
-	Tutorial parent = this.datastore.find(Tutorial.class).field("sequences").hasThisOne(seq).get();
+  public void deleteEntityById(final String id) {
+    Sequence seq = this.datastore.get(Sequence.class, id);
+    Tutorial parent = this.datastore.find(Tutorial.class).field("sequences").hasThisOne(seq).get();
     parent.removeSequence(seq);
     this.datastore.save(parent);
     this.datastore.delete(Sequence.class, id);
@@ -102,13 +99,24 @@ public class SequenceMongoCrudService implements MongoCrudService<Sequence> {
     }
   }
 
-  
+
   @Override
   public Optional<Sequence> findEntityByFieldValue(final String field, final Object value) {
 
-    final Sequence foundSequence = this.datastore.createQuery(Sequence.class).filter(field, value).get();
+    final Sequence foundSequence =
+        this.datastore.createQuery(Sequence.class).filter(field, value).get();
 
     return Optional.ofNullable(foundSequence);
+  }
+
+  @Override
+  public Optional<Sequence> saveUploadedEntity(Sequence sequence) {
+    this.datastore.save(sequence);
+
+    if (LOGGER.isInfoEnabled()) {
+      LOGGER.info("Inserted uploaded sequence with id " + sequence.getId());
+    }
+    return Optional.ofNullable(sequence);
   }
 
 
